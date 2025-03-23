@@ -1,14 +1,38 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
-import { ArrowRight, Gift, Home, LogOut, Plus, Search, Settings, ShoppingBag, Users } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { useState } from "react";
+import Link from "next/link";
+import {
+  ArrowRight,
+  Gift,
+  Home,
+  LogOut,
+  Plus,
+  Search,
+  Settings,
+  ShoppingBag,
+  Users,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import {
   Dialog,
   DialogContent,
@@ -17,17 +41,56 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { signOut } from "@logto/next/server-actions";
+import { logtoConfig } from "@/app/logto";
+import LogoutButton from "./logout.component";
 
 // Mock data
 const customers = [
-  { id: 1, name: "John Doe", phone: "(555) 123-4567", email: "john@example.com", points: 75 },
-  { id: 2, name: "Jane Smith", phone: "(555) 987-6543", email: "jane@example.com", points: 120 },
-  { id: 3, name: "Robert Johnson", phone: "(555) 456-7890", email: "robert@example.com", points: 45 },
-  { id: 4, name: "Emily Davis", phone: "(555) 234-5678", email: "emily@example.com", points: 200 },
-  { id: 5, name: "Michael Wilson", phone: "(555) 876-5432", email: "michael@example.com", points: 150 },
-]
+  {
+    id: 1,
+    name: "John Doe",
+    phone: "(555) 123-4567",
+    email: "john@example.com",
+    points: 75,
+  },
+  {
+    id: 2,
+    name: "Jane Smith",
+    phone: "(555) 987-6543",
+    email: "jane@example.com",
+    points: 120,
+  },
+  {
+    id: 3,
+    name: "Robert Johnson",
+    phone: "(555) 456-7890",
+    email: "robert@example.com",
+    points: 45,
+  },
+  {
+    id: 4,
+    name: "Emily Davis",
+    phone: "(555) 234-5678",
+    email: "emily@example.com",
+    points: 200,
+  },
+  {
+    id: 5,
+    name: "Michael Wilson",
+    phone: "(555) 876-5432",
+    email: "michael@example.com",
+    points: 150,
+  },
+];
 
 const transactions = [
   {
@@ -75,26 +138,46 @@ const transactions = [
     points: -50,
     type: "Redemption",
   },
-]
+];
 
 const rewards = [
-  { id: 1, name: "10% Discount", points: 100, description: "10% off your next purchase" },
-  { id: 2, name: "Free Ice Cream", points: 150, description: "One free ice cream of your choice" },
-  { id: 3, name: "Gift Card", points: 300, description: "$30 gift card for any store" },
-  { id: 4, name: "Premium Item", points: 500, description: "Select a premium clothing item" },
-]
+  {
+    id: 1,
+    name: "10% Discount",
+    points: 100,
+    description: "10% off your next purchase",
+  },
+  {
+    id: 2,
+    name: "Free Ice Cream",
+    points: 150,
+    description: "One free ice cream of your choice",
+  },
+  {
+    id: 3,
+    name: "Gift Card",
+    points: 300,
+    description: "$30 gift card for any store",
+  },
+  {
+    id: 4,
+    name: "Premium Item",
+    points: 500,
+    description: "Select a premium clothing item",
+  },
+];
 
 export default function EmployeeDashboard() {
-  const [activeTab, setActiveTab] = useState("dashboard")
-  const [searchQuery, setSearchQuery] = useState("")
-  const [selectedCustomer, setSelectedCustomer] = useState<any>(null)
+  const [activeTab, setActiveTab] = useState("dashboard");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCustomer, setSelectedCustomer] = useState<any>(null);
 
   const filteredCustomers = customers.filter(
     (customer) =>
       customer.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       customer.phone.includes(searchQuery) ||
       customer.email.toLowerCase().includes(searchQuery.toLowerCase()),
-  )
+  );
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -103,13 +186,10 @@ export default function EmployeeDashboard() {
           <div className="flex items-center justify-between">
             <h1 className="text-2xl font-bold">Employee Dashboard</h1>
             <div className="flex items-center gap-4">
-              <span className="text-sm text-muted-foreground">Employee: Jane Manager</span>
-              <Link href="/">
-                <Button variant="outline" size="sm">
-                  <LogOut className="h-4 w-4 mr-2" />
-                  Logout
-                </Button>
-              </Link>
+              <span className="text-sm text-muted-foreground">
+                Employee: Jane Manager
+              </span>
+              <LogoutButton />
             </div>
           </div>
         </div>
@@ -168,34 +248,48 @@ export default function EmployeeDashboard() {
                 <div className="flex flex-col md:flex-row gap-4">
                   <Card className="flex-1">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                      <CardTitle className="text-sm font-medium">Total Customers</CardTitle>
+                      <CardTitle className="text-sm font-medium">
+                        Total Customers
+                      </CardTitle>
                       <Users className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                      <div className="text-2xl font-bold">{customers.length}</div>
-                      <p className="text-xs text-muted-foreground">+2 from last week</p>
+                      <div className="text-2xl font-bold">
+                        {customers.length}
+                      </div>
+                      <p className="text-xs text-muted-foreground">
+                        +2 from last week
+                      </p>
                     </CardContent>
                   </Card>
 
                   <Card className="flex-1">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                      <CardTitle className="text-sm font-medium">Today's Transactions</CardTitle>
+                      <CardTitle className="text-sm font-medium">
+                        Today's Transactions
+                      </CardTitle>
                       <ShoppingBag className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
                       <div className="text-2xl font-bold">12</div>
-                      <p className="text-xs text-muted-foreground">+3 from yesterday</p>
+                      <p className="text-xs text-muted-foreground">
+                        +3 from yesterday
+                      </p>
                     </CardContent>
                   </Card>
 
                   <Card className="flex-1">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                      <CardTitle className="text-sm font-medium">Points Awarded Today</CardTitle>
+                      <CardTitle className="text-sm font-medium">
+                        Points Awarded Today
+                      </CardTitle>
                       <Gift className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
                       <div className="text-2xl font-bold">165</div>
-                      <p className="text-xs text-muted-foreground">+45 from yesterday</p>
+                      <p className="text-xs text-muted-foreground">
+                        +45 from yesterday
+                      </p>
                     </CardContent>
                   </Card>
                 </div>
@@ -219,12 +313,16 @@ export default function EmployeeDashboard() {
                       <TableBody>
                         {transactions.slice(0, 5).map((transaction) => (
                           <TableRow key={transaction.id}>
-                            <TableCell>{new Date(transaction.date).toLocaleDateString()}</TableCell>
+                            <TableCell>
+                              {new Date(transaction.date).toLocaleDateString()}
+                            </TableCell>
                             <TableCell>{transaction.customer}</TableCell>
                             <TableCell>{transaction.store}</TableCell>
                             <TableCell>{transaction.type}</TableCell>
                             <TableCell className="text-right font-medium">
-                              {transaction.points > 0 ? `+${transaction.points}` : transaction.points}
+                              {transaction.points > 0
+                                ? `+${transaction.points}`
+                                : transaction.points}
                             </TableCell>
                           </TableRow>
                         ))}
@@ -232,7 +330,11 @@ export default function EmployeeDashboard() {
                     </Table>
                   </CardContent>
                   <CardFooter>
-                    <Button variant="ghost" className="w-full" onClick={() => setActiveTab("transactions")}>
+                    <Button
+                      variant="ghost"
+                      className="w-full"
+                      onClick={() => setActiveTab("transactions")}
+                    >
                       View All Transactions
                     </Button>
                   </CardFooter>
@@ -242,7 +344,9 @@ export default function EmployeeDashboard() {
                   <CardHeader className="flex flex-row items-center">
                     <div>
                       <CardTitle>Quick Actions</CardTitle>
-                      <CardDescription>Common tasks for employees</CardDescription>
+                      <CardDescription>
+                        Common tasks for employees
+                      </CardDescription>
                     </div>
                   </CardHeader>
                   <CardContent>
@@ -258,7 +362,8 @@ export default function EmployeeDashboard() {
                           <DialogHeader>
                             <DialogTitle>Add Points</DialogTitle>
                             <DialogDescription>
-                              Add points to a customer's account based on their purchase.
+                              Add points to a customer's account based on their
+                              purchase.
                             </DialogDescription>
                           </DialogHeader>
                           <div className="space-y-4 py-4">
@@ -270,7 +375,10 @@ export default function EmployeeDashboard() {
                                 </SelectTrigger>
                                 <SelectContent>
                                   {customers.map((customer) => (
-                                    <SelectItem key={customer.id} value={customer.id.toString()}>
+                                    <SelectItem
+                                      key={customer.id}
+                                      value={customer.id.toString()}
+                                    >
                                       {customer.name}
                                     </SelectItem>
                                   ))}
@@ -284,14 +392,25 @@ export default function EmployeeDashboard() {
                                   <SelectValue placeholder="Select store" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                  <SelectItem value="ice-cream">Ice Cream Shop</SelectItem>
-                                  <SelectItem value="clothing">Clothing Store</SelectItem>
+                                  <SelectItem value="ice-cream">
+                                    Ice Cream Shop
+                                  </SelectItem>
+                                  <SelectItem value="clothing">
+                                    Clothing Store
+                                  </SelectItem>
                                 </SelectContent>
                               </Select>
                             </div>
                             <div className="space-y-2">
-                              <Label htmlFor="amount">Purchase Amount ($)</Label>
-                              <Input id="amount" type="number" min="0" step="0.01" />
+                              <Label htmlFor="amount">
+                                Purchase Amount ($)
+                              </Label>
+                              <Input
+                                id="amount"
+                                type="number"
+                                min="0"
+                                step="0.01"
+                              />
                             </div>
                           </div>
                           <DialogFooter>
@@ -310,7 +429,9 @@ export default function EmployeeDashboard() {
                         <DialogContent>
                           <DialogHeader>
                             <DialogTitle>Redeem Customer Reward</DialogTitle>
-                            <DialogDescription>Process a reward redemption for a customer.</DialogDescription>
+                            <DialogDescription>
+                              Process a reward redemption for a customer.
+                            </DialogDescription>
                           </DialogHeader>
                           <div className="space-y-4 py-4">
                             <div className="space-y-2">
@@ -321,7 +442,10 @@ export default function EmployeeDashboard() {
                                 </SelectTrigger>
                                 <SelectContent>
                                   {customers.map((customer) => (
-                                    <SelectItem key={customer.id} value={customer.id.toString()}>
+                                    <SelectItem
+                                      key={customer.id}
+                                      value={customer.id.toString()}
+                                    >
                                       {customer.name} ({customer.points} points)
                                     </SelectItem>
                                   ))}
@@ -336,7 +460,10 @@ export default function EmployeeDashboard() {
                                 </SelectTrigger>
                                 <SelectContent>
                                   {rewards.map((reward) => (
-                                    <SelectItem key={reward.id} value={reward.id.toString()}>
+                                    <SelectItem
+                                      key={reward.id}
+                                      value={reward.id.toString()}
+                                    >
                                       {reward.name} ({reward.points} points)
                                     </SelectItem>
                                   ))}
@@ -350,7 +477,10 @@ export default function EmployeeDashboard() {
                         </DialogContent>
                       </Dialog>
 
-                      <Button className="w-full" onClick={() => setActiveTab("customers")}>
+                      <Button
+                        className="w-full"
+                        onClick={() => setActiveTab("customers")}
+                      >
                         <Search className="mr-2 h-4 w-4" />
                         Find Customer
                       </Button>
@@ -365,7 +495,9 @@ export default function EmployeeDashboard() {
                 <Card>
                   <CardHeader>
                     <CardTitle>Customer Management</CardTitle>
-                    <CardDescription>Search and manage customer accounts</CardDescription>
+                    <CardDescription>
+                      Search and manage customer accounts
+                    </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="flex items-center space-x-2">
@@ -388,20 +520,33 @@ export default function EmployeeDashboard() {
                         <DialogContent>
                           <DialogHeader>
                             <DialogTitle>Add New Customer</DialogTitle>
-                            <DialogDescription>Create a new customer account in the loyalty program.</DialogDescription>
+                            <DialogDescription>
+                              Create a new customer account in the loyalty
+                              program.
+                            </DialogDescription>
                           </DialogHeader>
                           <div className="space-y-4 py-4">
                             <div className="space-y-2">
                               <Label htmlFor="new-name">Full Name</Label>
-                              <Input id="new-name" placeholder="Enter customer name" />
+                              <Input
+                                id="new-name"
+                                placeholder="Enter customer name"
+                              />
                             </div>
                             <div className="space-y-2">
                               <Label htmlFor="new-email">Email</Label>
-                              <Input id="new-email" type="email" placeholder="Enter customer email" />
+                              <Input
+                                id="new-email"
+                                type="email"
+                                placeholder="Enter customer email"
+                              />
                             </div>
                             <div className="space-y-2">
                               <Label htmlFor="new-phone">Phone Number</Label>
-                              <Input id="new-phone" placeholder="Enter customer phone" />
+                              <Input
+                                id="new-phone"
+                                placeholder="Enter customer phone"
+                              />
                             </div>
                           </div>
                           <DialogFooter>
@@ -424,7 +569,9 @@ export default function EmployeeDashboard() {
                       <TableBody>
                         {filteredCustomers.map((customer) => (
                           <TableRow key={customer.id}>
-                            <TableCell className="font-medium">{customer.name}</TableCell>
+                            <TableCell className="font-medium">
+                              {customer.name}
+                            </TableCell>
                             <TableCell>{customer.phone}</TableCell>
                             <TableCell>{customer.email}</TableCell>
                             <TableCell>{customer.points}</TableCell>
@@ -433,8 +580,8 @@ export default function EmployeeDashboard() {
                                 variant="ghost"
                                 size="sm"
                                 onClick={() => {
-                                  setSelectedCustomer(customer)
-                                  setActiveTab("customer-detail")
+                                  setSelectedCustomer(customer);
+                                  setActiveTab("customer-detail");
                                 }}
                               >
                                 View
@@ -453,10 +600,16 @@ export default function EmployeeDashboard() {
             {activeTab === "customer-detail" && selectedCustomer && (
               <div className="space-y-6">
                 <div className="flex items-center gap-2">
-                  <Button variant="outline" size="sm" onClick={() => setActiveTab("customers")}>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setActiveTab("customers")}
+                  >
                     Back to Customers
                   </Button>
-                  <h2 className="text-xl font-semibold">{selectedCustomer.name}</h2>
+                  <h2 className="text-xl font-semibold">
+                    {selectedCustomer.name}
+                  </h2>
                 </div>
 
                 <div className="grid gap-6 md:grid-cols-2">
@@ -471,16 +624,24 @@ export default function EmployeeDashboard() {
                           <p className="font-medium">{selectedCustomer.name}</p>
                         </div>
                         <div>
-                          <p className="text-sm text-muted-foreground">Points Balance</p>
-                          <p className="font-medium">{selectedCustomer.points}</p>
+                          <p className="text-sm text-muted-foreground">
+                            Points Balance
+                          </p>
+                          <p className="font-medium">
+                            {selectedCustomer.points}
+                          </p>
                         </div>
                         <div>
                           <p className="text-sm text-muted-foreground">Phone</p>
-                          <p className="font-medium">{selectedCustomer.phone}</p>
+                          <p className="font-medium">
+                            {selectedCustomer.phone}
+                          </p>
                         </div>
                         <div>
                           <p className="text-sm text-muted-foreground">Email</p>
-                          <p className="font-medium">{selectedCustomer.email}</p>
+                          <p className="font-medium">
+                            {selectedCustomer.email}
+                          </p>
                         </div>
                       </div>
                     </CardContent>
@@ -496,15 +657,25 @@ export default function EmployeeDashboard() {
                           <div className="space-y-4 py-4">
                             <div className="space-y-2">
                               <Label htmlFor="edit-name">Full Name</Label>
-                              <Input id="edit-name" defaultValue={selectedCustomer.name} />
+                              <Input
+                                id="edit-name"
+                                defaultValue={selectedCustomer.name}
+                              />
                             </div>
                             <div className="space-y-2">
                               <Label htmlFor="edit-email">Email</Label>
-                              <Input id="edit-email" type="email" defaultValue={selectedCustomer.email} />
+                              <Input
+                                id="edit-email"
+                                type="email"
+                                defaultValue={selectedCustomer.email}
+                              />
                             </div>
                             <div className="space-y-2">
                               <Label htmlFor="edit-phone">Phone Number</Label>
-                              <Input id="edit-phone" defaultValue={selectedCustomer.phone} />
+                              <Input
+                                id="edit-phone"
+                                defaultValue={selectedCustomer.phone}
+                              />
                             </div>
                           </div>
                           <DialogFooter>
@@ -521,7 +692,8 @@ export default function EmployeeDashboard() {
                           <DialogHeader>
                             <DialogTitle>Manage Points</DialogTitle>
                             <DialogDescription>
-                              Add or remove points from {selectedCustomer.name}'s account
+                              Add or remove points from {selectedCustomer.name}
+                              's account
                             </DialogDescription>
                           </DialogHeader>
                           <div className="space-y-4 py-4">
@@ -532,18 +704,27 @@ export default function EmployeeDashboard() {
                                   <SelectValue placeholder="Select action" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                  <SelectItem value="add">Add Points</SelectItem>
-                                  <SelectItem value="remove">Remove Points</SelectItem>
+                                  <SelectItem value="add">
+                                    Add Points
+                                  </SelectItem>
+                                  <SelectItem value="remove">
+                                    Remove Points
+                                  </SelectItem>
                                 </SelectContent>
                               </Select>
                             </div>
                             <div className="space-y-2">
-                              <Label htmlFor="points-amount">Points Amount</Label>
+                              <Label htmlFor="points-amount">
+                                Points Amount
+                              </Label>
                               <Input id="points-amount" type="number" min="1" />
                             </div>
                             <div className="space-y-2">
                               <Label htmlFor="points-reason">Reason</Label>
-                              <Input id="points-reason" placeholder="Reason for adjustment" />
+                              <Input
+                                id="points-reason"
+                                placeholder="Reason for adjustment"
+                              />
                             </div>
                           </div>
                           <DialogFooter>
@@ -572,10 +753,16 @@ export default function EmployeeDashboard() {
                             .filter((t) => t.customer === selectedCustomer.name)
                             .map((transaction, index) => (
                               <TableRow key={index}>
-                                <TableCell>{new Date(transaction.date).toLocaleDateString()}</TableCell>
+                                <TableCell>
+                                  {new Date(
+                                    transaction.date,
+                                  ).toLocaleDateString()}
+                                </TableCell>
                                 <TableCell>{transaction.type}</TableCell>
                                 <TableCell className="text-right font-medium">
-                                  {transaction.points > 0 ? `+${transaction.points}` : transaction.points}
+                                  {transaction.points > 0
+                                    ? `+${transaction.points}`
+                                    : transaction.points}
                                 </TableCell>
                               </TableRow>
                             ))}
@@ -591,7 +778,9 @@ export default function EmployeeDashboard() {
               <Card>
                 <CardHeader>
                   <CardTitle>Transaction History</CardTitle>
-                  <CardDescription>All customer transactions and point activities</CardDescription>
+                  <CardDescription>
+                    All customer transactions and point activities
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <Tabs defaultValue="all">
@@ -615,13 +804,21 @@ export default function EmployeeDashboard() {
                         <TableBody>
                           {transactions.map((transaction) => (
                             <TableRow key={transaction.id}>
-                              <TableCell>{new Date(transaction.date).toLocaleDateString()}</TableCell>
+                              <TableCell>
+                                {new Date(
+                                  transaction.date,
+                                ).toLocaleDateString()}
+                              </TableCell>
                               <TableCell>{transaction.customer}</TableCell>
                               <TableCell>{transaction.store}</TableCell>
-                              <TableCell>${transaction.amount.toFixed(2)}</TableCell>
+                              <TableCell>
+                                ${transaction.amount.toFixed(2)}
+                              </TableCell>
                               <TableCell>{transaction.type}</TableCell>
                               <TableCell className="text-right font-medium">
-                                {transaction.points > 0 ? `+${transaction.points}` : transaction.points}
+                                {transaction.points > 0
+                                  ? `+${transaction.points}`
+                                  : transaction.points}
                               </TableCell>
                             </TableRow>
                           ))}
@@ -644,11 +841,19 @@ export default function EmployeeDashboard() {
                             .filter((t) => t.type === "Purchase")
                             .map((transaction) => (
                               <TableRow key={transaction.id}>
-                                <TableCell>{new Date(transaction.date).toLocaleDateString()}</TableCell>
+                                <TableCell>
+                                  {new Date(
+                                    transaction.date,
+                                  ).toLocaleDateString()}
+                                </TableCell>
                                 <TableCell>{transaction.customer}</TableCell>
                                 <TableCell>{transaction.store}</TableCell>
-                                <TableCell>${transaction.amount.toFixed(2)}</TableCell>
-                                <TableCell className="text-right font-medium">+{transaction.points}</TableCell>
+                                <TableCell>
+                                  ${transaction.amount.toFixed(2)}
+                                </TableCell>
+                                <TableCell className="text-right font-medium">
+                                  +{transaction.points}
+                                </TableCell>
                               </TableRow>
                             ))}
                         </TableBody>
@@ -670,11 +875,17 @@ export default function EmployeeDashboard() {
                             .filter((t) => t.type === "Redemption")
                             .map((transaction) => (
                               <TableRow key={transaction.id}>
-                                <TableCell>{new Date(transaction.date).toLocaleDateString()}</TableCell>
+                                <TableCell>
+                                  {new Date(
+                                    transaction.date,
+                                  ).toLocaleDateString()}
+                                </TableCell>
                                 <TableCell>{transaction.customer}</TableCell>
                                 <TableCell>{transaction.store}</TableCell>
                                 <TableCell>10% Discount</TableCell>
-                                <TableCell className="text-right font-medium">{transaction.points}</TableCell>
+                                <TableCell className="text-right font-medium">
+                                  {transaction.points}
+                                </TableCell>
                               </TableRow>
                             ))}
                         </TableBody>
@@ -691,7 +902,9 @@ export default function EmployeeDashboard() {
                   <CardHeader className="flex flex-row items-center justify-between">
                     <div>
                       <CardTitle>Manage Rewards</CardTitle>
-                      <CardDescription>Configure available rewards for customers</CardDescription>
+                      <CardDescription>
+                        Configure available rewards for customers
+                      </CardDescription>
                     </div>
                     <Dialog>
                       <DialogTrigger asChild>
@@ -703,20 +916,32 @@ export default function EmployeeDashboard() {
                       <DialogContent>
                         <DialogHeader>
                           <DialogTitle>Add New Reward</DialogTitle>
-                          <DialogDescription>Create a new reward option for customers to redeem</DialogDescription>
+                          <DialogDescription>
+                            Create a new reward option for customers to redeem
+                          </DialogDescription>
                         </DialogHeader>
                         <div className="space-y-4 py-4">
                           <div className="space-y-2">
                             <Label htmlFor="reward-name">Reward Name</Label>
-                            <Input id="reward-name" placeholder="Enter reward name" />
+                            <Input
+                              id="reward-name"
+                              placeholder="Enter reward name"
+                            />
                           </div>
                           <div className="space-y-2">
-                            <Label htmlFor="reward-points">Points Required</Label>
+                            <Label htmlFor="reward-points">
+                              Points Required
+                            </Label>
                             <Input id="reward-points" type="number" min="1" />
                           </div>
                           <div className="space-y-2">
-                            <Label htmlFor="reward-description">Description</Label>
-                            <Input id="reward-description" placeholder="Enter reward description" />
+                            <Label htmlFor="reward-description">
+                              Description
+                            </Label>
+                            <Input
+                              id="reward-description"
+                              placeholder="Enter reward description"
+                            />
                           </div>
                         </div>
                         <DialogFooter>
@@ -738,7 +963,9 @@ export default function EmployeeDashboard() {
                       <TableBody>
                         {rewards.map((reward) => (
                           <TableRow key={reward.id}>
-                            <TableCell className="font-medium">{reward.name}</TableCell>
+                            <TableCell className="font-medium">
+                              {reward.name}
+                            </TableCell>
                             <TableCell>{reward.description}</TableCell>
                             <TableCell>{reward.points}</TableCell>
                             <TableCell className="text-right">
@@ -759,13 +986,19 @@ export default function EmployeeDashboard() {
               <Card>
                 <CardHeader>
                   <CardTitle>System Settings</CardTitle>
-                  <CardDescription>Configure loyalty program settings</CardDescription>
+                  <CardDescription>
+                    Configure loyalty program settings
+                  </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="points-ratio">Points Ratio</Label>
                     <div className="flex items-center gap-2">
-                      <Input id="points-ratio" defaultValue="1" className="w-20" />
+                      <Input
+                        id="points-ratio"
+                        defaultValue="1"
+                        className="w-20"
+                      />
                       <span>point(s) per</span>
                       <Input defaultValue="1" className="w-20" />
                       <span>dollar spent</span>
@@ -786,7 +1019,9 @@ export default function EmployeeDashboard() {
                     </Select>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="min-redemption">Minimum Points for Redemption</Label>
+                    <Label htmlFor="min-redemption">
+                      Minimum Points for Redemption
+                    </Label>
                     <Input id="min-redemption" defaultValue="100" />
                   </div>
                 </CardContent>
@@ -805,6 +1040,5 @@ export default function EmployeeDashboard() {
         </div>
       </footer>
     </div>
-  )
+  );
 }
-
