@@ -1,7 +1,5 @@
 import { logout } from "@/action/logout";
-import { logtoConfig } from "@/app/logto";
 import { Button } from "@/components/ui/button";
-import { signOut } from "@logto/next/server-actions";
 import { LogOut } from "lucide-react";
 
 export default function LogoutButton() {
