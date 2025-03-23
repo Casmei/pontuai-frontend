@@ -1,4 +1,4 @@
-import { logtoConfig } from "@/app/logto";
+import { logtoConfig } from "@/config/logto";
 import { getLogtoContext } from "@logto/next/server-actions";
 import { redirect } from "next/navigation";
 import Header from "./header.component";
