@@ -254,11 +254,11 @@ export default function Home() {
                   <div className="space-y-2">
                     <div className="flex justify-between text-xs">
                       <span className="text-gray-500">Café Latte</span>
-                      <span className="font-medium text-amber-600">+5 pts</span>
+                      <span className="font-medium text-green-500">+5 pts</span>
                     </div>
                     <div className="flex justify-between text-xs">
                       <span className="text-gray-500">Sanduíche</span>
-                      <span className="font-medium text-amber-600">
+                      <span className="font-medium text-green-500">
                         +10 pts
                       </span>
                     </div>
