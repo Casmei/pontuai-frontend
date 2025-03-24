@@ -113,6 +113,9 @@ importers:
       embla-carousel-react:
         specifier: 8.5.1
         version: 8.5.1(react@19.0.0)
+      envalid:
+        specifier: ^8.0.0
+        version: 8.0.0
       framer-motion:
         specifier: ^12.5.0
         version: 12.5.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -1301,6 +1304,10 @@ packages:
   emoji-regex@9.2.2:
     resolution: {integrity: sha512-L18DaJsXSUk2+42pv8mLs5jJT2hqFkFE4j21wOmgbUqsZ2hL72NsUU785g9RXgo3s0ZNgVl42TiHp3ZtOv/Vyg==}
 
+  envalid@8.0.0:
+    resolution: {integrity: sha512-PGeYJnJB5naN0ME6SH8nFcDj9HVbLpYIfg1p5lAyM9T4cH2lwtu2fLbozC/bq+HUUOIFxhX/LP0/GmlqPHT4tQ==}
+    engines: {node: '>=8.12'}
+
   escalade@3.2.0:
     resolution: {integrity: sha512-WUj2qlxaQtO4g6Pq5c29GTcWGDyd8itL8zTlipgECz3JesAiiOKotd8JU6otB3PACgG6xkJUyVhboMS+bje/jA==}
     engines: {node: '>=6'}
@@ -1829,6 +1836,9 @@ packages:
 
   ts-interface-checker@0.1.13:
     resolution: {integrity: sha512-Y/arvbn+rrz3JCKl9C4kVNfTfSm2/mEp5FSz5EsZSANGPSlQrpRI5M4PKF+mJnE52jOO90PnPSc3Ur3bTQw0gA==}
+
+  tslib@2.6.2:
+    resolution: {integrity: sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==}
 
   tslib@2.8.1:
     resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
@@ -3022,6 +3032,10 @@ snapshots:
 
   emoji-regex@9.2.2: {}
 
+  envalid@8.0.0:
+    dependencies:
+      tslib: 2.6.2
+
   escalade@3.2.0: {}
 
   eventemitter3@4.0.7: {}
@@ -3536,6 +3550,8 @@ snapshots:
       is-number: 7.0.0
 
   ts-interface-checker@0.1.13: {}
+
+  tslib@2.6.2: {}
 
   tslib@2.8.1: {}
 

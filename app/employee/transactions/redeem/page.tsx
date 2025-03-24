@@ -126,8 +126,7 @@ export default function RedeemPointsPage() {
                     key={reward.id}
                     value={reward.id.toString()}
                     disabled={
-                      selectedCustomer &&
-                      selectedCustomer.points < reward.points
+                      selectedCustomer?.id ? selectedCustomer.points < reward.points : false
                     }
                   >
                     {reward.name} ({reward.points} pontos)

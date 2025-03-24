@@ -35,6 +35,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import Link from "next/link";
+import { useParams } from "next/navigation"; // A partir do Next.js 13.4+
 
 // Mock data - in a real app, this would come from an API call
 const customers = [
@@ -114,15 +115,10 @@ const transactions = [
   },
 ];
 
-export default function CustomerDetailPage({
-  params,
-}: {
-  params: { id: string };
-}) {
-  // Find customer by ID
-  const customer = customers.find((c) => c.id === params.id) || customers[0];
+export default function CustomerDetailPage() {
+  const { id } = useParams(); // Pega o parâmetro diretamente
 
-  // Filter transactions for this customer
+  const customer = customers.find((c) => c.id === id) || customers[0];
   const customerTransactions = transactions.filter(
     (t) => t.customer === customer.name,
   );
