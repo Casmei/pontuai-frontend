@@ -1,5 +1,5 @@
 import { logtoConfig } from "@/config/logto";
-import { getLogtoContext } from "@logto/next/server-actions";
+import { getAccessTokenRSC, getLogtoContext } from "@logto/next/server-actions";
 import { redirect } from "next/navigation";
 import Header from "./header.component";
 import Sidebar from "./sidebar.component";
@@ -12,6 +12,9 @@ export default async function EmployeeLayout({
   const { isAuthenticated, userInfo } = await getLogtoContext(logtoConfig, {
     fetchUserInfo: true,
   });
+
+  console.log(await getAccessTokenRSC(logtoConfig, "https://pontuai-api.kontact.com.br"));
+
 
   if (!isAuthenticated) {
     redirect("/");
