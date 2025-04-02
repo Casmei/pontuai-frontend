@@ -12,13 +12,13 @@ export async function GET(request: NextRequest) {
 
   const tenants = await tenantControllerGetMyTenants({
     headers: {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
+      'Authorization': `Bearer ${token}`
     }
   });
 
-  const hasData = Array.isArray(tenants.data) && tenants.data.length > 0;
-
-  if (hasData) { redirect("/dashboard/alguma-coisa"); } else { redirect("/tenant/create"); }
-
+  if (tenants.length > 0) {
+    redirect(`/dashboard/${tenants[0].slug}`);
+  } else {
+    redirect("/tenant/create");
+  }
 }

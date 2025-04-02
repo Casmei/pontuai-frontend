@@ -2,12 +2,13 @@ module.exports = {
     petstore: {
       output: {
         target: 'http/api.ts',
-        client: 'fetch',
-        httpClient: 'fetch',
-        baseUrl: 'http://localhost:3001'
+        override: {
+          mutator: {
+            path: './http/mutator.ts',
+            name: 'customFetch'
+          }
+        }
       },
-      input: {
-        target: './api.yaml',
-      },
+      input: 'http://localhost:3001/docs-yaml',
     },
   };

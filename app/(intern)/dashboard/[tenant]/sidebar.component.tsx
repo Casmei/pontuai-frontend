@@ -12,37 +12,41 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-export default function Sidebar() {
+interface SidebarProps {
+  tenant: string;
+}
+
+export default function Sidebar({ tenant }: SidebarProps) {
   const pathname = usePathname();
 
   const routes = [
     {
-      href: "/employee/dashboard",
+      href: `/dashboard/${tenant}`,
       icon: Home,
       label: "Dashboard",
     },
     {
-      href: "/employee/customers",
+      href: `/dashboard/${tenant}/customers`,
       icon: Users,
       label: "Clientes",
     },
     {
-      href: "/employee/transactions",
+      href: `/dashboard/${tenant}/transactions`,
       icon: ShoppingBag,
       label: "Transações",
     },
     {
-      href: "/employee/rewards",
+      href: `/dashboard/${tenant}/rewards`,
       icon: Gift,
       label: "Prêmios",
     },
     {
-      href: "/employee/attendants",
+      href: `/dashboard/${tenant}/attendants`,
       icon: UserPlus,
       label: "Atendentes",
     },
     {
-      href: "/employee/settings",
+      href: `/dashboard/${tenant}/settings`,
       icon: Settings,
       label: "Configurações",
     },
