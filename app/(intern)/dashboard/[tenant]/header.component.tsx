@@ -2,6 +2,7 @@
 
 import LogoutButton from "./logout.component";
 
+
 interface HeaderInterface {
   employerName?: string;
 }
