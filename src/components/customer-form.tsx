@@ -8,15 +8,12 @@ import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { createCustomer } from "@/lib/services/customer-service"
+import { toast } from "sonner"
 
 const formSchema = z.object({
   name: z.string().min(2, "Nome deve ter pelo menos 2 caracteres"),
   phone: z.string().min(10, "Telefone deve ter pelo menos 10 dígitos"),
 })
-
-const toast = (data: any) => {
-  console.log(data)
-}
 
 interface CustomerFormProps {
   storeId: string
@@ -37,16 +34,14 @@ export function CustomerForm({ storeId }: CustomerFormProps) {
     try {
       setIsLoading(true)
       await createCustomer(storeId, values)
-      toast({
-        title: "Cliente adicionado",
+      toast.success("Cliente adicionado", {
         description: "O cliente foi adicionado com sucesso.",
       })
       form.reset()
     } catch (error) {
-      toast({
-        title: "Erro",
+      console.error(error)
+      toast.error("Erro", {
         description: "Ocorreu um erro ao adicionar o cliente.",
-        variant: "destructive",
       })
     } finally {
       setIsLoading(false)

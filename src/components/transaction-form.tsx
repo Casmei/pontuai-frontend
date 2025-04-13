@@ -14,6 +14,7 @@ import { getCustomers } from "@/lib/services/customer-service"
 import { getRewards } from "@/lib/services/reward-service"
 import { useEffect } from "react"
 import type { Customer, Reward } from "@/lib/types"
+import { toast } from "sonner"
 
 const purchaseSchema = z.object({
   type: z.literal("purchase"),
@@ -26,10 +27,6 @@ const redeemSchema = z.object({
   customerId: z.string().min(1, "Selecione um cliente"),
   rewardId: z.string().min(1, "Selecione uma recompensa"),
 })
-
-const toast = (data: any) => {
-  console.log(data)
-}
 
 const formSchema = z.discriminatedUnion("type", [purchaseSchema, redeemSchema])
 
@@ -62,10 +59,9 @@ export function TransactionForm({ storeId }: TransactionFormProps) {
         const rewardsData = await getRewards(storeId)
         setRewards(rewardsData)
       } catch (error) {
-        toast({
-          title: "Erro",
+        console.error(error)
+        toast.error("Erro", {
           description: "Não foi possível carregar os dados.",
-          variant: "destructive",
         })
       }
     }
@@ -77,8 +73,7 @@ export function TransactionForm({ storeId }: TransactionFormProps) {
     try {
       setIsLoading(true)
       await createTransaction(storeId, values)
-      toast({
-        title: "Transação registrada",
+      toast.success("Transação registrada", {
         description: "A transação foi registrada com sucesso.",
       })
       form.reset({
@@ -87,10 +82,9 @@ export function TransactionForm({ storeId }: TransactionFormProps) {
         amount: 0,
       })
     } catch (error) {
-      toast({
-        title: "Erro",
+      console.error(error)
+      toast.error("Erro", {
         description: "Ocorreu um erro ao registrar a transação.",
-        variant: "destructive",
       })
     } finally {
       setIsLoading(false)

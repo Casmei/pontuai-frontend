@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { createStore } from "@/lib/services/store-service"
+import { toast } from "sonner"
 
 const formSchema = z.object({
   name: z.string().min(2, "Nome deve ter pelo menos 2 caracteres"),
@@ -18,10 +19,6 @@ const formSchema = z.object({
   phone: z.string().min(10, "Telefone deve ter pelo menos 10 dígitos"),
   description: z.string().optional(),
 })
-
-const toast = (data: any) => {
-  console.log(data)
-}
 
 export function StoreForm() {
   const router = useRouter()
@@ -41,16 +38,14 @@ export function StoreForm() {
     try {
       setIsLoading(true)
       const storeId = await createStore(values)
-      toast({
-        title: "Estabelecimento criado",
+      toast.success("Estabelecimento criado", {
         description: "Seu estabelecimento foi criado com sucesso.",
       })
       router.push(`/stores/${storeId}`)
     } catch (error) {
-      toast({
-        title: "Erro",
+      console.error(error)
+      toast("Erro", {
         description: "Ocorreu um erro ao criar o estabelecimento.",
-        variant: "destructive",
       })
     } finally {
       setIsLoading(false)

@@ -1,5 +1,5 @@
-import type { Store, StoreConfig, StoreStats } from "@/lib/types"
-import { generateId } from "@/lib/utils"
+import type { Store, StoreConfig, StoreStats } from "@/lib/types";
+import { generateId } from "@/lib/utils";
 
 // Simulação de banco de dados
 const stores: Store[] = [
@@ -21,7 +21,7 @@ const stores: Store[] = [
     customerCount: 78,
     createdAt: new Date("2023-03-22"),
   },
-]
+];
 
 const storeConfigs: Record<string, StoreConfig> = {
   store1: {
@@ -36,29 +36,31 @@ const storeConfigs: Record<string, StoreConfig> = {
     minSpendToEarn: 5,
     minPointsToRedeem: 100,
   },
-}
+};
 
 // Funções de serviço
 export async function getStores(): Promise<Store[]> {
   // Simula uma chamada de API
   return new Promise((resolve) => {
     setTimeout(() => {
-      resolve(stores)
-    }, 500)
-  })
+      resolve(stores);
+    }, 500);
+  });
 }
 
 export async function getStoreById(id: string): Promise<Store | null> {
   // Simula uma chamada de API
   return new Promise((resolve) => {
     setTimeout(() => {
-      const store = stores.find((s) => s.id === id)
-      resolve(store || null)
-    }, 300)
-  })
+      const store = stores.find((s) => s.id === id);
+      resolve(store || null);
+    }, 300);
+  });
 }
 
-export async function createStore(data: Omit<Store, "id" | "customerCount" | "createdAt">): Promise<string> {
+export async function createStore(
+  data: Omit<Store, "id" | "customerCount" | "createdAt">
+): Promise<string> {
   // Simula uma chamada de API
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -67,9 +69,9 @@ export async function createStore(data: Omit<Store, "id" | "customerCount" | "cr
         ...data,
         customerCount: 0,
         createdAt: new Date(),
-      }
+      };
 
-      stores.push(newStore)
+      stores.push(newStore);
 
       // Inicializa a configuração padrão
       storeConfigs[newStore.id] = {
@@ -77,11 +79,11 @@ export async function createStore(data: Omit<Store, "id" | "customerCount" | "cr
         expirationDays: 90,
         minSpendToEarn: 10,
         minPointsToRedeem: 50,
-      }
+      };
 
-      resolve(newStore.id)
-    }, 800)
-  })
+      resolve(newStore.id);
+    }, 800);
+  });
 }
 
 export async function getStoreConfig(storeId: string): Promise<StoreConfig> {
@@ -94,23 +96,27 @@ export async function getStoreConfig(storeId: string): Promise<StoreConfig> {
           expirationDays: 90,
           minSpendToEarn: 10,
           minPointsToRedeem: 50,
-        },
-      )
-    }, 300)
-  })
+        }
+      );
+    }, 300);
+  });
 }
 
-export async function updateStoreConfig(storeId: string, config: StoreConfig): Promise<void> {
+export async function updateStoreConfig(
+  storeId: string,
+  config: StoreConfig
+): Promise<void> {
   // Simula uma chamada de API
   return new Promise((resolve) => {
     setTimeout(() => {
-      storeConfigs[storeId] = config
-      resolve()
-    }, 500)
-  })
+      storeConfigs[storeId] = config;
+      resolve();
+    }, 500);
+  });
 }
 
 export async function getStoreStats(storeId: string): Promise<StoreStats> {
+  console.log(storeId);
   // Simula uma chamada de API
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -124,7 +130,7 @@ export async function getStoreStats(storeId: string): Promise<StoreStats> {
         redeemedThisMonth: 850,
         activePoints: 5280,
         pointsEarnedThisMonth: 1240,
-      })
-    }, 800)
-  })
+      });
+    }, 800);
+  });
 }

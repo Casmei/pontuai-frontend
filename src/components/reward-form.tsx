@@ -9,6 +9,7 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { createReward } from "@/lib/services/reward-service"
+import { toast } from "sonner"
 
 const formSchema = z.object({
   name: z.string().min(2, "Nome deve ter pelo menos 2 caracteres"),
@@ -18,10 +19,6 @@ const formSchema = z.object({
 
 interface RewardFormProps {
   storeId: string
-}
-
-const toast = (data: any) => {
-  console.log(data)
 }
 
 export function RewardForm({ storeId }: RewardFormProps) {
@@ -40,16 +37,14 @@ export function RewardForm({ storeId }: RewardFormProps) {
     try {
       setIsLoading(true)
       await createReward(storeId, values)
-      toast({
-        title: "Recompensa adicionada",
+      toast.success("Recompensa adicionada", {
         description: "A recompensa foi adicionada com sucesso.",
       })
       form.reset()
     } catch (error) {
-      toast({
-        title: "Erro",
+      console.error(error)
+      toast("Erro", {
         description: "Ocorreu um erro ao adicionar a recompensa.",
-        variant: "destructive",
       })
     } finally {
       setIsLoading(false)

@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { updateStoreConfig } from "@/lib/services/store-service"
 import type { StoreConfig } from "@/lib/types"
+import { toast } from "sonner"
 
 const formSchema = z.object({
   pointsPerReal: z.coerce.number().min(0.1, "Deve ser pelo menos 0.1"),
@@ -21,10 +22,6 @@ const formSchema = z.object({
 interface ConfigFormProps {
   storeId: string
   initialData: StoreConfig
-}
-
-const toast = (data: any) => {
-  console.log(data)
 }
 
 export function ConfigForm({ storeId, initialData }: ConfigFormProps) {
@@ -44,15 +41,13 @@ export function ConfigForm({ storeId, initialData }: ConfigFormProps) {
     try {
       setIsLoading(true)
       await updateStoreConfig(storeId, values)
-      toast({
-        title: "Configurações atualizadas",
+      toast.success("Configurações atualizadas", {
         description: "As configurações foram salvas com sucesso.",
       })
     } catch (error) {
-      toast({
-        title: "Erro",
+      console.error(error)
+      toast.error("Erro", {
         description: "Ocorreu um erro ao salvar as configurações.",
-        variant: "destructive",
       })
     } finally {
       setIsLoading(false)
