@@ -3,10 +3,10 @@
 import {
   BarChart3,
   Gift,
-  LandmarkIcon,
   Receipt,
   Settings,
-  Users
+  Users,
+  House,
 } from "lucide-react"
 import * as React from "react"
 
@@ -69,11 +69,11 @@ export function AppSidebar({ data = fakeData, ...props }: Props) {
             <SidebarMenuButton size="lg" asChild>
               <a href="#">
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                  <LandmarkIcon className="size-4" />
+                  <House className="size-4" />
                 </div>
                 <div className="flex flex-col gap-0.5 leading-none">
-                  <span className="font-semibold">Afeições - MG</span>
-                  <span className="">Câmara Municipal</span>
+                  <span className="font-semibold">Sorvete Amigo</span>
+                  <span className="">Administrador</span>
                 </div>
               </a>
             </SidebarMenuButton>

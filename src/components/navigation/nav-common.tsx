@@ -85,7 +85,7 @@ export function NavCommon({
               )}
 
               {!item.items?.length && (
-                <SidebarMenuButton asChild className={pathname.startsWith(item.url) && item.url !== "/stores" ? `bg-primary/20` : ``}>
+                <SidebarMenuButton asChild className={pathname.endsWith(item.url) ? `bg-primary/20` : ``}>
                   <Link href={`/stores/${storeId}/${item.url}`}>
                     {item.icon && <item.icon />}
                     <span>{item.title}</span>
