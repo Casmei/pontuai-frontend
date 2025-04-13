@@ -1,11 +1,11 @@
 import { LogtoNextConfig } from "@logto/next";
 
 export const logtoConfig: LogtoNextConfig = {
-  endpoint: "https://0zyxhw.logto.app/",
-  appId: "8bwfog7qb518g3hhcj6wl",
-  appSecret: "Fm1US7jfCVGmxczXQpwu6EzgUrlwVYXt",
-  baseUrl: "http://localhost:3000", // Change to your own base URL
-  cookieSecret: "WD475D6bo2JMmvFApXf2GANt9sbY5ovb", // Auto-generated 32 digit secret
+  endpoint: process.env.LOGTO_ENDPOINT!,
+  appId: process.env.LOGTO_APP_ID!,
+  appSecret: process.env.LOGTO_APP_SECRET!,
+  baseUrl: process.env.LOGTO_BASE_URL!,
+  cookieSecret: process.env.LOGTO_COOKIE_SECRET!,
   cookieSecure: process.env.NODE_ENV === "production",
   resources: ["https://pontuai-api.kontact.com.br"],
 };
