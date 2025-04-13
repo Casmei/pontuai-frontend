@@ -57,7 +57,7 @@ export async function RecentTransactions({ storeId, limit = 5 }: RecentTransacti
                 {transaction.type === "purchase" ? (
                   <>
                     <p className="text-green-600">+{transaction.pointsEarned} pts</p>
-                    <p className="text-xs text-muted-foreground">{formatCurrency(transaction.amount)}</p>
+                    <p className="text-xs text-muted-foreground">{formatCurrency(transaction.amount!)}</p>
                   </>
                 ) : (
                   <>

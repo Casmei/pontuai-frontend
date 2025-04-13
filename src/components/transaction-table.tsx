@@ -49,7 +49,7 @@ export async function TransactionTable({ storeId }: TransactionTableProps) {
               </TableCell>
               <TableCell>
                 {transaction.type === "purchase" ? (
-                  <span>{formatCurrency(transaction.amount)}</span>
+                  <span>{formatCurrency(transaction.amount!)}</span>
                 ) : (
                   <span>{transaction.reward?.name}</span>
                 )}

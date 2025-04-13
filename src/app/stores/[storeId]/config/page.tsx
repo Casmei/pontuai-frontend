@@ -4,14 +4,15 @@ import { getStoreConfig } from "@/lib/services/store-service"
 export default async function StoreConfigPage({
   params,
 }: {
-  params: { storeId: string }
+  params: Promise<{ storeId: string }>
 }) {
-  const config = await getStoreConfig(params.storeId)
+  const { storeId } = await params
+  const config = await getStoreConfig(storeId)
 
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold">Configurações</h1>
-      <ConfigForm storeId={params.storeId} initialData={config} />
+      <ConfigForm storeId={storeId} initialData={config} />
     </div>
   )
 }
