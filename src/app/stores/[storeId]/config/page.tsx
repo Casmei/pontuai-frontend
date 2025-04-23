@@ -6,9 +6,9 @@ import { getStoreById } from "@/lib/services/store-service"
 export default async function StoreConfigPage({
   params,
 }: {
-  params: { storeId: string }
+  params: Promise<{ storeId: string }>
 }) {
-  const { storeId } = params
+  const { storeId } = await params
   const [err, store] = await getStoreById(storeId)
 
   if (err) {
@@ -32,7 +32,7 @@ export default async function StoreConfigPage({
           <TabsTrigger value="notifications">Configuração de Notificações</TabsTrigger>
         </TabsList>
         <TabsContent value="points">
-          <ConfigForm storeId={storeId} initialData={config} />
+          <ConfigForm storeId={storeId} initialData={config.pointConfig} />
         </TabsContent>
         <TabsContent value="notifications">
           <NotificationConfigForm storeId={storeId} />

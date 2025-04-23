@@ -36,7 +36,7 @@ export interface TenantControllerCreateRequest {
 }
 
 export interface TenantControllerUpdateConfigRequest {
-    tenantSlug: string;
+    tenantId: string;
     updateTenantSettingsDto: UpdateTenantSettingsDto;
 }
 
@@ -127,10 +127,10 @@ export class TenantApi extends runtime.BaseAPI {
      * Update tenant settings
      */
     async tenantControllerUpdateConfigRaw(requestParameters: TenantControllerUpdateConfigRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters['tenantSlug'] == null) {
+        if (requestParameters['tenantId'] == null) {
             throw new runtime.RequiredError(
-                'tenantSlug',
-                'Required parameter "tenantSlug" was null or undefined when calling tenantControllerUpdateConfig().'
+                'tenantId',
+                'Required parameter "tenantId" was null or undefined when calling tenantControllerUpdateConfig().'
             );
         }
 
@@ -156,7 +156,7 @@ export class TenantApi extends runtime.BaseAPI {
             }
         }
         const response = await this.request({
-            path: `/tenant/{tenant_slug}/settings`.replace(`{${"tenant_slug"}}`, encodeURIComponent(String(requestParameters['tenantSlug']))),
+            path: `/tenant/{tenant_id}/settings`.replace(`{${"tenant_id"}}`, encodeURIComponent(String(requestParameters['tenantId']))),
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,

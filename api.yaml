@@ -117,14 +117,14 @@ paths:
       summary: Get my tenants
       tags:
         - Tenant
-  /tenant/{tenant_slug}/settings:
+  /tenant/{tenant_id}/settings:
     patch:
       operationId: TenantController_updateConfig
       parameters:
-        - name: tenant_slug
+        - name: tenant_id
           required: true
           in: path
-          description: The unique slug identifier of the tenant
+          description: The unique id identifier of the tenant
           schema:
             example: my-tenant
             type: string

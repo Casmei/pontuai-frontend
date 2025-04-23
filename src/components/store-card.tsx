@@ -21,7 +21,7 @@ export function StoreCard({ store }: StoreCardProps) {
         </div>
         <div className="flex items-center gap-2">
           <PaperclipIcon className="h-4 w-4" />
-          <span>{store.cNPJ} clientes</span>
+          <span>100 clientes</span>
         </div>
       </CardContent>
       <CardFooter>

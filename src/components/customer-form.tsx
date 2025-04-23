@@ -13,6 +13,7 @@ import { toast } from "sonner"
 const formSchema = z.object({
   name: z.string().min(2, "Nome deve ter pelo menos 2 caracteres"),
   phone: z.string().min(10, "Telefone deve ter pelo menos 10 dígitos"),
+  moneySpent: z.number({ invalid_type_error: "Valor gasto precisa ser um número inteiro" }).optional()
 })
 
 interface CustomerFormProps {
@@ -27,6 +28,7 @@ export function CustomerForm({ storeId }: CustomerFormProps) {
     defaultValues: {
       name: "",
       phone: "",
+      moneySpent: 0,
     },
   })
 
@@ -51,7 +53,7 @@ export function CustomerForm({ storeId }: CustomerFormProps) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <FormField
             control={form.control}
             name="name"
@@ -74,6 +76,20 @@ export function CustomerForm({ storeId }: CustomerFormProps) {
                 <FormLabel>Telefone</FormLabel>
                 <FormControl>
                   <Input placeholder="(00) 00000-0000" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="moneySpent"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Dinheiro Gasto</FormLabel>
+                <FormControl>
+                  <Input placeholder="12.4" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

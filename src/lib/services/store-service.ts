@@ -8,7 +8,7 @@ const apiClient = new TenantApi(
   new Configuration({
     basePath: API_URL,
     accessToken: async () => {
-      return await getAccessTokenRSC(logtoConfig, logtoConfig.resources![0]) 
+      return await getAccessTokenRSC(logtoConfig, logtoConfig.resources![0])
     },
   })
 );
@@ -59,7 +59,6 @@ export async function getStoreStats(storeId: string) {
   console.log("Fetching store stats for storeId:", storeId);
   return new Promise((resolve) => {
     setTimeout(() => {
-      // Dados simulados
       resolve({
         totalCustomers: 42,
         newCustomersThisMonth: 5,

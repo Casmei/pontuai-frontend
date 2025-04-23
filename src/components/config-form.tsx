@@ -1,56 +1,77 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { updateStoreConfig } from "@/lib/services/store-service"
-import type { StoreConfig } from "@/lib/types"
-import { toast } from "sonner"
+import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { toast } from "sonner";
+import { PointConfig } from "@/gen";
+import { updatePointConfig } from "@/action/update-point-config";
 
 const formSchema = z.object({
   pointsPerReal: z.coerce.number().min(0.1, "Deve ser pelo menos 0.1"),
   expirationDays: z.coerce.number().int().min(1, "Deve ser pelo menos 1 dia"),
   minSpendToEarn: z.coerce.number().min(0, "Não pode ser negativo"),
-  minPointsToRedeem: z.coerce.number().int().min(1, "Deve ser pelo menos 1 ponto"),
-})
+  minPointsToRedeem: z.coerce
+    .number()
+    .int()
+    .min(1, "Deve ser pelo menos 1 ponto"),
+});
 
 interface ConfigFormProps {
-  storeId: string
-  initialData: StoreConfig
+  storeId: string;
+  initialData: PointConfig;
 }
 
 export function ConfigForm({ storeId, initialData }: ConfigFormProps) {
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      pointsPerReal: initialData.pointsPerReal,
-      expirationDays: initialData.expirationDays,
-      minSpendToEarn: initialData.minSpendToEarn,
-      minPointsToRedeem: initialData.minPointsToRedeem,
+      pointsPerReal: initialData.ratio.amount,
+      expirationDays: initialData.expirationInDays,
+      minSpendToEarn: initialData.ratio.moneySpent,
+      minPointsToRedeem: initialData.minimumRedemptionValue,
     },
-  })
+  });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      setIsLoading(true)
-      await updateStoreConfig(storeId, values)
+      setIsLoading(true);
+
+      await updatePointConfig({
+        tenantId: storeId,
+        updateTenantSettingsDto: {
+          expirationInDays: values.expirationDays,
+          minimumRedemptionValue: values.minPointsToRedeem,
+          ratioAmount: values.pointsPerReal,
+          ratioMoneySpent: values.minSpendToEarn,
+        },
+      });
+
       toast.success("Configurações atualizadas", {
         description: "As configurações foram salvas com sucesso.",
-      })
+      });
     } catch (error) {
-      console.error(error)
+      console.error(error);
       toast.error("Erro", {
         description: "Ocorreu um erro ao salvar as configurações.",
-      })
+      });
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
@@ -68,7 +89,9 @@ export function ConfigForm({ storeId, initialData }: ConfigFormProps) {
                   <FormControl>
                     <Input type="number" step="0.1" {...field} />
                   </FormControl>
-                  <FormDescription>Quantos pontos o cliente ganha para cada R$ 1,00 gasto</FormDescription>
+                  <FormDescription>
+                    Quantos pontos o cliente ganha para cada R$ 1,00 gasto
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -83,7 +106,9 @@ export function ConfigForm({ storeId, initialData }: ConfigFormProps) {
                   <FormControl>
                     <Input type="number" {...field} />
                   </FormControl>
-                  <FormDescription>Número de dias até os pontos expirarem</FormDescription>
+                  <FormDescription>
+                    Número de dias até os pontos expirarem
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -99,7 +124,8 @@ export function ConfigForm({ storeId, initialData }: ConfigFormProps) {
                     <Input type="number" step="0.01" {...field} />
                   </FormControl>
                   <FormDescription>
-                    Valor mínimo que o cliente precisa gastar para começar a ganhar pontos
+                    Valor mínimo que o cliente precisa gastar para começar a
+                    ganhar pontos
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -115,7 +141,10 @@ export function ConfigForm({ storeId, initialData }: ConfigFormProps) {
                   <FormControl>
                     <Input type="number" {...field} />
                   </FormControl>
-                  <FormDescription>Quantidade mínima de pontos necessários para fazer um resgate</FormDescription>
+                  <FormDescription>
+                    Quantidade mínima de pontos necessários para fazer um
+                    resgate
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -130,5 +159,5 @@ export function ConfigForm({ storeId, initialData }: ConfigFormProps) {
         </Form>
       </CardContent>
     </Card>
-  )
+  );
 }
