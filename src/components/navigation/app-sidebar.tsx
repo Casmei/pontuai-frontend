@@ -72,7 +72,7 @@ export function AppSidebar({ data = fakeData, ...props }: Props) {
                   <House className="size-4" />
                 </div>
                 <div className="flex flex-col gap-0.5 leading-none">
-                  <span className="font-semibold">Sorvete Amigo</span>
+                  <span className="font-semibold">Usuário de teste</span>
                   <span className="">Administrador</span>
                 </div>
               </a>
