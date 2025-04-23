@@ -2,7 +2,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { ArrowRight, MapPin, PaperclipIcon } from "lucide-react"
-import { GetMyTenantsResponse } from "@/gen"
+import { GetMyTenantsResponse } from "@/gen/models/GetMyTenantsResponse"
 
 interface StoreCardProps {
   store: GetMyTenantsResponse
