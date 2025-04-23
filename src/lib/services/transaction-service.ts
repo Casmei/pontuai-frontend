@@ -1,8 +1,8 @@
-import type { Transaction } from "@/lib/types"
 import { generateId } from "@/lib/utils"
 import { getCustomerById, updateCustomerPoints } from "./customer-service"
 import { getRewardById } from "./reward-service"
-import { getStoreConfig } from "./store-service"
+
+type Transaction = any;
 
 // Simulação de banco de dados
 const transactions: Record<string, Transaction[]> = {
@@ -144,7 +144,7 @@ export async function createTransaction(storeId: string, data: TransactionData):
       let transaction: Transaction
 
       if (data.type === "purchase") {
-        const config = await getStoreConfig(storeId)
+        const config = {} as any
 
         // Calcula pontos apenas se o valor for maior que o mínimo
         let pointsEarned = 0

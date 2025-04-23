@@ -1,0 +1,20 @@
+/* tslint:disable */
+/* eslint-disable */
+export * from './AddPointsDto';
+export * from './AddPointsResponse';
+export * from './CreateCustomerDto';
+export * from './CreateCustomerResponse';
+export * from './CreateRewardDto';
+export * from './CreateRewardResponse';
+export * from './CreateTenantDto';
+export * from './CreateTenantResponse';
+export * from './CustomerResponse';
+export * from './CustomerWithPointsResponse';
+export * from './GetTenant';
+export * from './PointConfig';
+export * from './RatioConfig';
+export * from './RedeemRewardDto';
+export * from './TenantConfig';
+export * from './UpdateRewardDto';
+export * from './UpdateTenantSettingsDto';
+export * from './WhatsappConfig';

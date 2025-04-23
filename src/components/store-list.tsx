@@ -2,7 +2,16 @@ import { getStores } from "@/lib/services/store-service"
 import { StoreCard } from "@/components/store-card"
 
 export async function StoreList() {
-  const stores = await getStores()
+  const [err, stores] = await getStores()
+
+  if (err) {
+    return (
+      <div className="flex flex-col items-center justify-center rounded-lg border border-dashed p-8 text-center">
+        <h2 className="text-lg font-semibold">Erro ao buscar estabelecimentos</h2>
+        <p className="text-sm text-muted-foreground mt-2">{err.message}</p>
+      </div>
+    )
+  }
 
   if (stores.length === 0) {
     return (

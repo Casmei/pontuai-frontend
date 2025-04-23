@@ -1,11 +1,11 @@
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import type { Store } from "@/lib/types"
 import Link from "next/link"
-import { ArrowRight, MapPin, Users } from "lucide-react"
+import { ArrowRight, MapPin, PaperclipIcon } from "lucide-react"
+import { GetMyTenantsResponse } from "@/gen"
 
 interface StoreCardProps {
-  store: Store
+  store: GetMyTenantsResponse
 }
 
 export function StoreCard({ store }: StoreCardProps) {
@@ -17,11 +17,11 @@ export function StoreCard({ store }: StoreCardProps) {
       <CardContent className="text-sm text-muted-foreground">
         <div className="flex items-center gap-2 mb-2">
           <MapPin className="h-4 w-4" />
-          <span>{store.address}</span>
+          <span>{store.slug}</span>
         </div>
         <div className="flex items-center gap-2">
-          <Users className="h-4 w-4" />
-          <span>{store.customerCount} clientes</span>
+          <PaperclipIcon className="h-4 w-4" />
+          <span>{store.cNPJ} clientes</span>
         </div>
       </CardContent>
       <CardFooter>

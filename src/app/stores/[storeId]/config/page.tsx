@@ -1,7 +1,7 @@
 import { ConfigForm } from "@/components/config-form"
 import { NotificationConfigForm } from "@/components/notification-config-form"
-import { getStoreConfig } from "@/lib/services/store-service"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { getStoreById } from "@/lib/services/store-service"
 
 export default async function StoreConfigPage({
   params,
@@ -9,7 +9,18 @@ export default async function StoreConfigPage({
   params: { storeId: string }
 }) {
   const { storeId } = params
-  const config = await getStoreConfig(storeId)
+  const [err, store] = await getStoreById(storeId)
+
+  if (err) {
+    return (
+      <div className="flex flex-col items-center justify-center rounded-lg border border-dashed p-8 text-center">
+        <h2 className="text-lg font-semibold">Erro ao buscar loja</h2>
+        <p className="text-sm text-muted-foreground mt-2">{err.message}</p>
+      </div>
+    )
+  }
+
+  const config = store.config;
 
   return (
     <div className="space-y-6">
