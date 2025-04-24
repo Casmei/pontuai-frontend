@@ -18,7 +18,7 @@ import {
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { useParams, usePathname } from "next/navigation"
 
 type Props = {
   title: string,
@@ -65,8 +65,8 @@ export function NavCommon({
   title,
 }: Props) {
   const pathname = usePathname()
-
-  const storeId = "store1"
+  const params = useParams()
+  const { storeId } = params as { storeId: string }
 
   return (
     <SidebarGroup>
