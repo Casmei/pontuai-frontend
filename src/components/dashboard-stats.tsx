@@ -18,8 +18,8 @@ export async function DashboardStats({ storeId }: DashboardStatsProps) {
           <Users className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">{stats.totalCustomers}</div>
-          <p className="text-xs text-muted-foreground">{stats.newCustomersThisMonth} novos este mês</p>
+          <div className="text-2xl font-bold">59</div>
+          <p className="text-xs text-muted-foreground">5 novos este mês</p>
         </CardContent>
       </Card>
 
@@ -29,8 +29,8 @@ export async function DashboardStats({ storeId }: DashboardStatsProps) {
           <Gift className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">{stats.totalPointsRedeemed}</div>
-          <p className="text-xs text-muted-foreground">{stats.redeemedThisMonth} este mês</p>
+          <div className="text-2xl font-bold">385</div>
+          <p className="text-xs text-muted-foreground">98 este mês</p>
         </CardContent>
       </Card>
 
@@ -40,8 +40,8 @@ export async function DashboardStats({ storeId }: DashboardStatsProps) {
           <TrendingUp className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">{stats.activePoints}</div>
-          <p className="text-xs text-muted-foreground">{stats.pointsEarnedThisMonth} ganhos este mês</p>
+          <div className="text-2xl font-bold">784</div>
+          <p className="text-xs text-muted-foreground">312 ganhos este mês</p>
         </CardContent>
       </Card>
     </div>
