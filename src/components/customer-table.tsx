@@ -10,7 +10,16 @@ interface CustomerTableProps {
 }
 
 export async function CustomerTable({ storeId }: CustomerTableProps) {
-  const customers = await getCustomers(storeId)
+  const [err, customers] = await getCustomers({ xTenantId: storeId })
+
+  if (err) {
+    return (
+      <div className="flex flex-col items-center justify-center rounded-lg border border-dashed p-8 text-center">
+        <h2 className="text-lg font-semibold">Erro ao buscar clientes</h2>
+        <p className="text-sm text-muted-foreground mt-2">{err.message}</p>
+      </div>
+    )
+  }
 
   if (customers.length === 0) {
     return (
@@ -29,19 +38,20 @@ export async function CustomerTable({ storeId }: CustomerTableProps) {
             <TableHead>Nome</TableHead>
             <TableHead>Telefone</TableHead>
             <TableHead>Pontos</TableHead>
-            <TableHead>Data de Cadastro</TableHead>
+            {/* <TableHead>Data de Cadastro</TableHead> */}
             <TableHead>Ações</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {customers.map((customer) => (
+          {customers.map(({ customer, points }) => (
             <TableRow key={customer.id}>
               <TableCell className="font-medium">{customer.name}</TableCell>
               <TableCell>{customer.phone}</TableCell>
               <TableCell>
-                <Badge variant="outline">{customer.points} pts</Badge>
+                <Badge variant="outline">{points} pts</Badge>
               </TableCell>
-              <TableCell>{formatDate(customer.createdAt)}</TableCell>
+              {/* TODO */}
+              {/* <TableCell>{formatDate(customer.createdAt)}</TableCell> */}
               <TableCell>
                 <div className="flex gap-2">
                   <Button variant="ghost" size="icon">

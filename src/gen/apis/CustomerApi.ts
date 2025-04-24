@@ -15,9 +15,9 @@
 
 import * as runtime from '../runtime';
 import type {
-  CreateCustomerDto,
-  CreateCustomerResponse,
-  CustomerWithPointsResponse,
+    CreateCustomerDto,
+    CreateCustomerResponse,
+    CustomerWithPointsResponse,
 } from '../models/index';
 import {
     CreateCustomerDtoFromJSON,

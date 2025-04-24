@@ -283,7 +283,7 @@ components:
           description: Customer phone
           example: '+5533999166432'
         moneySpent:
-          type: object
+          type: number
           description: Customer Money Spent
           example: null
           nullable: true

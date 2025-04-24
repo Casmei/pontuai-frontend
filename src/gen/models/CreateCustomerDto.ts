@@ -33,10 +33,10 @@ export interface CreateCustomerDto {
     phone: string;
     /**
      * Customer Money Spent
-     * @type {object}
+     * @type {number}
      * @memberof CreateCustomerDto
      */
-    moneySpent?: object | null;
+    moneySpent?: number | null;
 }
 
 /**

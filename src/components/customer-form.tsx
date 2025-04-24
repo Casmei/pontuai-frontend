@@ -1,27 +1,36 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-import { Button } from "@/components/ui/button"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { createCustomer } from "@/lib/services/customer-service"
-import { toast } from "sonner"
+import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { toast } from "sonner";
+import { createCustomerAction } from "@/action/create-customer";
 
 const formSchema = z.object({
   name: z.string().min(2, "Nome deve ter pelo menos 2 caracteres"),
   phone: z.string().min(10, "Telefone deve ter pelo menos 10 dígitos"),
-  moneySpent: z.number({ invalid_type_error: "Valor gasto precisa ser um número inteiro" }).optional()
-})
+  moneySpent: z
+    .number({ invalid_type_error: "Valor gasto precisa ser um número" })
+  ,
+});
 
 interface CustomerFormProps {
-  storeId: string
+  storeId: string;
 }
 
 export function CustomerForm({ storeId }: CustomerFormProps) {
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -30,23 +39,30 @@ export function CustomerForm({ storeId }: CustomerFormProps) {
       phone: "",
       moneySpent: 0,
     },
-  })
+  });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      setIsLoading(true)
-      await createCustomer(storeId, values)
+      setIsLoading(true);
+      await createCustomerAction({
+        xTenantId: storeId,
+        createCustomerDto: {
+          name: values.name,
+          phone: values.phone,
+          moneySpent: values.moneySpent,
+        },
+      });
       toast.success("Cliente adicionado", {
         description: "O cliente foi adicionado com sucesso.",
-      })
-      form.reset()
+      });
+      form.reset();
     } catch (error) {
-      console.error(error)
+      console.error(error);
       toast.error("Erro", {
         description: "Ocorreu um erro ao adicionar o cliente.",
-      })
+      });
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
@@ -89,7 +105,7 @@ export function CustomerForm({ storeId }: CustomerFormProps) {
               <FormItem>
                 <FormLabel>Dinheiro Gasto</FormLabel>
                 <FormControl>
-                  <Input placeholder="12.4" {...field} />
+                  <Input placeholder="12.4" {...field} type="number" onChange={(e) => field.onChange(+e.target.value)} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -104,5 +120,5 @@ export function CustomerForm({ storeId }: CustomerFormProps) {
         </div>
       </form>
     </Form>
-  )
+  );
 }
