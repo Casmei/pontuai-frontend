@@ -1,85 +1,42 @@
-import type { Reward } from "@/lib/types"
-import { generateId } from "@/lib/utils"
+import { logtoConfig } from "@/config/logto";
+import { Configuration, RewardApi, RewardControllerAllRequest, RewardControllerCreateRequest } from "@/gen";
+import { getAccessTokenRSC } from "@logto/next/server-actions";
 
-// Simulação de banco de dados
-const rewards: Record<string, Reward[]> = {
-  store1: [
-    {
-      id: "reward1",
-      name: "Café Expresso Grátis",
-      description: "Um café expresso de qualquer tipo",
-      pointsRequired: 50,
-      createdAt: new Date("2023-01-20"),
+const API_URL = process.env.API_URL;
+const apiClient = new RewardApi(
+  new Configuration({
+    basePath: API_URL,
+    accessToken: async () => {
+      return await getAccessTokenRSC(logtoConfig, logtoConfig.resources![0]);
     },
-    {
-      id: "reward2",
-      name: "Desconto de 15%",
-      description: "Desconto de 15% em qualquer compra",
-      pointsRequired: 100,
-      createdAt: new Date("2023-01-25"),
-    },
-    {
-      id: "reward3",
-      name: "Bolo Fatia Grátis",
-      description: "Uma fatia de bolo à sua escolha",
-      pointsRequired: 80,
-      createdAt: new Date("2023-02-05"),
-    },
-  ],
-  store2: [
-    {
-      id: "reward4",
-      name: "Pão Francês (6 unidades)",
-      description: "Meia dúzia de pães franceses",
-      pointsRequired: 60,
-      createdAt: new Date("2023-03-25"),
-    },
-    {
-      id: "reward5",
-      name: "Desconto de 10%",
-      description: "Desconto de 10% em qualquer compra",
-      pointsRequired: 80,
-      createdAt: new Date("2023-04-10"),
-    },
-  ],
+  })
+);
+
+export async function getRewards(data: RewardControllerAllRequest) {
+  try {
+    const response = await apiClient.rewardControllerAll(data, {
+      cache: "force-cache",
+      next: { tags: [getRewards.name] },
+    });
+
+
+    return [null, response] as const;
+  } catch (e) {
+    console.error(e);
+    return [new Error("Falha ao buscar premios"), null] as const;
+  }
 }
 
-// Funções de serviço
-export async function getRewards(storeId: string): Promise<Reward[]> {
-  // Simula uma chamada de API
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(rewards[storeId] || [])
-    }, 500)
-  })
+export async function getRewardById(storeId: string, rewardId: string) {
+  return null;
 }
 
-export async function getRewardById(storeId: string, rewardId: string): Promise<Reward | null> {
-  // Simula uma chamada de API
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const reward = (rewards[storeId] || []).find((r) => r.id === rewardId)
-      resolve(reward || null)
-    }, 300)
-  })
-}
-
-export async function createReward(storeId: string, data: Omit<Reward, "id" | "createdAt">): Promise<string> {
-  // Simula uma chamada de API
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const newReward: Reward = {
-        id: generateId(),
-        ...data,
-        createdAt: new Date(),
-      }
-
-      if (!rewards[storeId]) {
-        rewards[storeId] = []
-      }
-
-      rewards[storeId].push(newReward)
-      resolve(newReward.id)
-    }, 500)
-  })
+export async function createReward(data: RewardControllerCreateRequest) {
+  try {
+    const response = await apiClient.rewardControllerCreate(data);
+    return [null, response] as const;
+  } catch (e) {
+    console.error(e);
+    return [new Error("Falha ao criar prêmio"), null] as const;
+  }
 }

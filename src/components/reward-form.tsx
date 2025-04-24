@@ -1,53 +1,73 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-import { Button } from "@/components/ui/button"
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { createReward } from "@/lib/services/reward-service"
-import { toast } from "sonner"
+import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { createReward } from "@/lib/services/reward-service";
+import { toast } from "sonner";
+import { createRewardAction } from "@/action/create-reward";
 
 const formSchema = z.object({
   name: z.string().min(2, "Nome deve ter pelo menos 2 caracteres"),
   description: z.string().optional(),
   pointsRequired: z.coerce.number().int().min(1, "Deve ser pelo menos 1 ponto"),
-})
+});
 
 interface RewardFormProps {
-  storeId: string
+  storeId: string;
 }
 
 export function RewardForm({ storeId }: RewardFormProps) {
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
       description: "",
-      pointsRequired: 100,
+      pointsRequired: 0,
     },
-  })
+  });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit({
+    name,
+    pointsRequired,
+    description,
+  }: z.infer<typeof formSchema>) {
     try {
-      setIsLoading(true)
-      await createReward(storeId, values)
+      setIsLoading(true);
+      await createRewardAction({
+        xTenantId: storeId,
+        createRewardDto: {
+          name,
+          description: description || "",
+          pointValue: pointsRequired,
+        },
+      });
       toast.success("Recompensa adicionada", {
         description: "A recompensa foi adicionada com sucesso.",
-      })
-      form.reset()
+      });
+      form.reset();
     } catch (error) {
-      console.error(error)
+      console.error(error);
       toast("Erro", {
         description: "Ocorreu um erro ao adicionar a recompensa.",
-      })
+      });
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
@@ -93,7 +113,10 @@ export function RewardForm({ storeId }: RewardFormProps) {
               <FormControl>
                 <Textarea placeholder="Descreva a recompensa" {...field} />
               </FormControl>
-              <FormDescription>Forneça detalhes sobre a recompensa e como ela pode ser resgatada</FormDescription>
+              <FormDescription>
+                Forneça detalhes sobre a recompensa e como ela pode ser
+                resgatada
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -106,5 +129,5 @@ export function RewardForm({ storeId }: RewardFormProps) {
         </div>
       </form>
     </Form>
-  )
+  );
 }

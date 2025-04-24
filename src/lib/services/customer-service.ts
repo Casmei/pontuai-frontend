@@ -28,7 +28,7 @@ export async function getCustomers(data: CustomerControllerGetAllRequest) {
     return [null, response] as const;
   } catch (e) {
     console.error(e);
-    return [new Error("Falha ao criar cliente"), null] as const;
+    return [new Error("Falha ao buscar clientes"), null] as const;
   }
 }
 

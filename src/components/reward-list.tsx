@@ -6,13 +6,22 @@ interface RewardListProps {
 }
 
 export async function RewardList({ storeId }: RewardListProps) {
-  const rewards = await getRewards(storeId)
+  const [err, rewards] = await getRewards({ xTenantId: storeId });
+
+  if (err) {
+    return (
+      <div className="flex flex-col items-center justify-center rounded-lg border border-dashed p-8 text-center">
+        <h2 className="text-lg font-semibold">Erro ao buscar prêmios</h2>
+        <p className="text-sm text-muted-foreground mt-2">{err.message}</p>
+      </div>
+    )
+  }
 
   if (rewards.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center rounded-lg border border-dashed p-8 text-center">
-        <h3 className="text-lg font-semibold">Nenhuma recompensa cadastrada</h3>
-        <p className="text-sm text-muted-foreground mt-2">Adicione recompensas usando o formulário acima.</p>
+        <h2 className="text-lg font-semibold">Nenhum prêmio encontrado</h2>
+        <p className="text-sm text-muted-foreground mt-2">Crie seu primeiro prêmio para começar no formulário a cima!</p>
       </div>
     )
   }
