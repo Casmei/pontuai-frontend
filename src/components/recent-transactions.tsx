@@ -1,4 +1,3 @@
-import { getTransactions } from "@/lib/services/transaction-service"
 import { formatDate, formatCurrency } from "@/lib/utils"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -9,7 +8,7 @@ interface RecentTransactionsProps {
 }
 
 export async function RecentTransactions({ storeId, limit = 5 }: RecentTransactionsProps) {
-  const transactions = await getTransactions(storeId, limit)
+  const transactions: any[] = []
 
   if (transactions.length === 0) {
     return (

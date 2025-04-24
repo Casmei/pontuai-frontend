@@ -17,17 +17,24 @@ import * as runtime from '../runtime';
 import type {
   AddPointsDto,
   AddPointsResponse,
+  TransactionResponse,
 } from '../models/index';
 import {
     AddPointsDtoFromJSON,
     AddPointsDtoToJSON,
     AddPointsResponseFromJSON,
     AddPointsResponseToJSON,
+    TransactionResponseFromJSON,
+    TransactionResponseToJSON,
 } from '../models/index';
 
 export interface TransactionControllerCreateRequest {
     xTenantId: string;
     addPointsDto: AddPointsDto;
+}
+
+export interface TransactionControllerGetAllRequest {
+    xTenantId: string;
 }
 
 /**
@@ -36,7 +43,7 @@ export interface TransactionControllerCreateRequest {
 export class TransactionApi extends runtime.BaseAPI {
 
     /**
-     * Create a new reward
+     * Create a new transaction
      */
     async transactionControllerCreateRaw(requestParameters: TransactionControllerCreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AddPointsResponse>> {
         if (requestParameters['xTenantId'] == null) {
@@ -83,10 +90,55 @@ export class TransactionApi extends runtime.BaseAPI {
     }
 
     /**
-     * Create a new reward
+     * Create a new transaction
      */
     async transactionControllerCreate(requestParameters: TransactionControllerCreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AddPointsResponse> {
         const response = await this.transactionControllerCreateRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Find all invoices
+     */
+    async transactionControllerGetAllRaw(requestParameters: TransactionControllerGetAllRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<TransactionResponse>>> {
+        if (requestParameters['xTenantId'] == null) {
+            throw new runtime.RequiredError(
+                'xTenantId',
+                'Required parameter "xTenantId" was null or undefined when calling transactionControllerGetAll().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (requestParameters['xTenantId'] != null) {
+            headerParameters['x-tenant-id'] = String(requestParameters['xTenantId']);
+        }
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearer", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/transaction`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(TransactionResponseFromJSON));
+    }
+
+    /**
+     * Find all invoices
+     */
+    async transactionControllerGetAll(requestParameters: TransactionControllerGetAllRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<TransactionResponse>> {
+        const response = await this.transactionControllerGetAllRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

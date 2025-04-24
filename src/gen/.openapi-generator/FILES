@@ -18,7 +18,9 @@ models/GetTenant.ts
 models/PointConfig.ts
 models/RatioConfig.ts
 models/RedeemRewardDto.ts
+models/RewardResponse.ts
 models/TenantConfig.ts
+models/TransactionResponse.ts
 models/UpdateRewardDto.ts
 models/UpdateTenantSettingsDto.ts
 models/WhatsappConfig.ts

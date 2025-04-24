@@ -71,7 +71,31 @@ paths:
           description: Bad request
         '401':
           description: Unauthorized
-      summary: Create a new reward
+      summary: Create a new transaction
+      tags:
+        - Transaction
+    get:
+      operationId: TransactionController_getAll
+      parameters:
+        - name: x-tenant-id
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TransactionResponse'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+      summary: Find all invoices
       tags:
         - Transaction
   /tenant:
@@ -384,6 +408,10 @@ components:
           type: number
           description: Amount of points added or removed
           example: 100
+        value:
+          type: number
+          description: Amount of value spent
+          example: 1536
         customerId:
           type: string
           description: The customer identifier related to the point transaction
@@ -407,10 +435,82 @@ components:
         - id
         - type
         - points
+        - value
         - customerId
         - rewardId
         - createdAt
         - updatedAt
+    RewardResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the reward
+          example: 36e6eb8e-4178-4438-8dfa-2d723794bb93
+        name:
+          type: string
+          description: The name of the reward
+          example: Café Grátis
+        description:
+          type: string
+          description: The description of the reward
+          example: ''
+        point_value:
+          type: number
+          description: The point cost of the reward
+          example: 100
+      required:
+        - id
+        - name
+        - description
+        - point_value
+    TransactionResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the transaction
+          example: 2d9c1d31-62a3-46ed-8b9f-84a3e97d4125
+        type:
+          type: string
+          description: The type of transaction (input or output)
+          example: input
+        points:
+          type: number
+          description: The number of points for the transaction
+          example: 100
+        value:
+          type: object
+          description: The monetary value associated (if any)
+          example: 100
+          nullable: true
+        createdAt:
+          type: string
+          description: Date when the transaction was created
+          example: '2025-04-24T21:20:04.629Z'
+        updatedAt:
+          type: string
+          description: Date when the transaction was last updated
+          example: '2025-04-24T21:20:04.629Z'
+        customer:
+          description: The customer associated with the transaction
+          nullable: false
+          allOf:
+            - $ref: '#/components/schemas/CustomerResponse'
+        reward:
+          description: The reward associated with the transaction (only if type is output)
+          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/RewardResponse'
+      required:
+        - id
+        - type
+        - points
+        - value
+        - createdAt
+        - updatedAt
+        - customer
+        - reward
     CreateTenantDto:
       type: object
       properties:

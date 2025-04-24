@@ -38,6 +38,12 @@ export interface AddPointsResponse {
      */
     points: number;
     /**
+     * Amount of value spent
+     * @type {number}
+     * @memberof AddPointsResponse
+     */
+    value: number;
+    /**
      * The customer identifier related to the point transaction
      * @type {string}
      * @memberof AddPointsResponse
@@ -81,6 +87,7 @@ export function instanceOfAddPointsResponse(value: object): value is AddPointsRe
     if (!('id' in value) || value['id'] === undefined) return false;
     if (!('type' in value) || value['type'] === undefined) return false;
     if (!('points' in value) || value['points'] === undefined) return false;
+    if (!('value' in value) || value['value'] === undefined) return false;
     if (!('customerId' in value) || value['customerId'] === undefined) return false;
     if (!('rewardId' in value) || value['rewardId'] === undefined) return false;
     if (!('createdAt' in value) || value['createdAt'] === undefined) return false;
@@ -101,6 +108,7 @@ export function AddPointsResponseFromJSONTyped(json: any, ignoreDiscriminator: b
         'id': json['id'],
         'type': json['type'],
         'points': json['points'],
+        'value': json['value'],
         'customerId': json['customerId'],
         'rewardId': json['rewardId'],
         'createdAt': json['createdAt'],
@@ -122,6 +130,7 @@ export function AddPointsResponseToJSONTyped(value?: AddPointsResponse | null, i
         'id': value['id'],
         'type': value['type'],
         'points': value['points'],
+        'value': value['value'],
         'customerId': value['customerId'],
         'rewardId': value['rewardId'],
         'createdAt': value['createdAt'],

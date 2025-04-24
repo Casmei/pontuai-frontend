@@ -1,5 +1,5 @@
 import { logtoConfig } from "@/config/logto";
-import { Configuration, RewardApi, RewardControllerAllRequest, RewardControllerCreateRequest } from "@/gen";
+import { Configuration, RewardApi, RewardControllerAllRequest, RewardControllerCreateRequest, RewardControllerRedeemRequest } from "@/gen";
 import { getAccessTokenRSC } from "@logto/next/server-actions";
 
 const API_URL = process.env.API_URL;
@@ -29,6 +29,16 @@ export async function getRewards(data: RewardControllerAllRequest) {
 
 export async function getRewardById(storeId: string, rewardId: string) {
   return null;
+}
+
+export async function redeemReward(data: RewardControllerRedeemRequest) {
+  try {
+    const response = await apiClient.rewardControllerRedeem(data);
+    return [null, response] as const;
+  } catch (e) {
+    console.error(e);
+    return [new Error("Falha ao criar prêmio"), null] as const;
+  }
 }
 
 export async function createReward(data: RewardControllerCreateRequest) {
