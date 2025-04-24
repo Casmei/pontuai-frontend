@@ -37,7 +37,8 @@ export function StoreForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       setIsLoading(true)
-      const storeId = await createStore(values)
+      //TODO: PEuzin deixa as coisas pela metade, e eu tmb
+      const storeId = await createStore({ createTenantDto: { cnpj: values.name, name: values.name, slug: values.name } })
       toast.success("Estabelecimento criado", {
         description: "Seu estabelecimento foi criado com sucesso.",
       })
