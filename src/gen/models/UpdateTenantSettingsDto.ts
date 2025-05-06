@@ -37,6 +37,24 @@ export interface UpdateTenantSettingsDto {
      * @memberof UpdateTenantSettingsDto
      */
     minimumValueForWinPoints: number;
+    /**
+     * base url of evolution service
+     * @type {string}
+     * @memberof UpdateTenantSettingsDto
+     */
+    baseUrl?: string | null;
+    /**
+     * Api key of evolution service
+     * @type {string}
+     * @memberof UpdateTenantSettingsDto
+     */
+    apikey?: string | null;
+    /**
+     * Instance name of evolution service
+     * @type {string}
+     * @memberof UpdateTenantSettingsDto
+     */
+    instanceName?: string | null;
 }
 
 /**
@@ -62,6 +80,9 @@ export function UpdateTenantSettingsDtoFromJSONTyped(json: any, ignoreDiscrimina
         'pointsForMoneySpent': json['pointsForMoneySpent'],
         'expirationInDays': json['expirationInDays'],
         'minimumValueForWinPoints': json['minimumValueForWinPoints'],
+        'baseUrl': json['baseUrl'] == null ? undefined : json['baseUrl'],
+        'apikey': json['apikey'] == null ? undefined : json['apikey'],
+        'instanceName': json['instanceName'] == null ? undefined : json['instanceName'],
     };
 }
 
@@ -79,6 +100,9 @@ export function UpdateTenantSettingsDtoToJSONTyped(value?: UpdateTenantSettingsD
         'pointsForMoneySpent': value['pointsForMoneySpent'],
         'expirationInDays': value['expirationInDays'],
         'minimumValueForWinPoints': value['minimumValueForWinPoints'],
+        'baseUrl': value['baseUrl'],
+        'apikey': value['apikey'],
+        'instanceName': value['instanceName'],
     };
 }
 

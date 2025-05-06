@@ -9,6 +9,8 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { toast } from "sonner"
+import { TenantConfig } from "@/gen";
+import { updatePointConfigAction } from "@/action/update-point-config"
 
 const formSchema = z.object({
     apikey: z.string().min(1, "API Key é obrigatória"),
@@ -24,33 +26,54 @@ export type NotificationConfig = {
 
 interface NotificationConfigFormProps {
     storeId: string
+    initialData: TenantConfig
 }
 
-export function NotificationConfigForm({ storeId }: NotificationConfigFormProps) {
+export function NotificationConfigForm({ storeId, initialData }: NotificationConfigFormProps) {
     const [isLoading, setIsLoading] = useState(false)
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            apikey: "",
-            baseUrl: "",
-            instanceName: "",
+            apikey: initialData.whatsappConfig.apikey,
+            baseUrl: initialData.whatsappConfig.baseUrl,
+            instanceName: initialData.whatsappConfig.instanceName,
         },
     })
 
-    async function onSubmit(values: z.infer<typeof formSchema>) {
+    async function onSubmit(data: z.infer<typeof formSchema>) {
+        setIsLoading(true);
+
         try {
-            setIsLoading(true)
+            const [error] = await updatePointConfigAction({
+                tenantId: storeId,
+                updateTenantSettingsDto: {
+                    expirationInDays: initialData.pointConfig.expirationInDays,
+                    minimumValueForWinPoints: initialData.pointConfig.minimumValueForWinPoints,
+                    pointsForMoneySpent: initialData.pointConfig.pointsForMoneySpent,
+                    apikey: data.apikey,
+                    baseUrl: data.baseUrl,
+                    instanceName: data.instanceName,
+                },
+            });
+
+            if (error) {
+                toast.error("Erro ao salvar", {
+                    description: error.message || "Erro desconhecido ao atualizar as configurações.",
+                });
+                return;
+            }
+
             toast.success("Configurações atualizadas", {
-                description: "As configurações de notificação foram salvas com sucesso.",
-            })
-        } catch (error) {
-            console.error(error)
-            toast.error("Erro", {
-                description: "Ocorreu um erro ao salvar as configurações de notificação.",
-            })
+                description: "As configurações foram salvas com sucesso.",
+            });
+        } catch (err: unknown) {
+            console.error(err);
+            toast.error("Erro inesperado", {
+                description: "Ocorreu um erro ao salvar as configurações.",
+            });
         } finally {
-            setIsLoading(false)
+            setIsLoading(false);
         }
     }
 
@@ -66,7 +89,7 @@ export function NotificationConfigForm({ storeId }: NotificationConfigFormProps)
                                 <FormItem>
                                     <FormLabel>API Key</FormLabel>
                                     <FormControl>
-                                        <Input {...field} />
+                                        <Input type="password" {...field} />
                                     </FormControl>
                                     <FormDescription>Chave de API para o serviço de notificação</FormDescription>
                                     <FormMessage />

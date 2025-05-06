@@ -17,7 +17,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { toast } from "sonner";
-import { PointConfig } from "@/gen";
+import { TenantConfig } from "@/gen";
 import { updatePointConfigAction } from "@/action/update-point-config";
 
 const formSchema = z.object({
@@ -30,7 +30,7 @@ const formSchema = z.object({
 
 interface ConfigFormProps {
   storeId: string;
-  initialData: PointConfig;
+  initialData: TenantConfig;
 }
 
 export function ConfigForm({ storeId, initialData }: ConfigFormProps) {
@@ -44,9 +44,9 @@ export function ConfigForm({ storeId, initialData }: ConfigFormProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      pointsForMoneySpent: initialData.pointsForMoneySpent,
-      expirationInDays: initialData.expirationInDays,
-      minimumValueForWinPoints: initialData.minimumValueForWinPoints,
+      pointsForMoneySpent: initialData.pointConfig.pointsForMoneySpent,
+      expirationInDays: initialData.pointConfig.expirationInDays,
+      minimumValueForWinPoints: initialData.pointConfig.minimumValueForWinPoints,
     },
   });
 

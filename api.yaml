@@ -580,6 +580,21 @@ components:
           type: number
           description: Minimum value for win points
           example: 100
+        baseUrl:
+          type: string
+          description: base url of evolution service
+          example: https://evolution.kontact.com.br
+          nullable: true
+        apikey:
+          type: string
+          description: Api key of evolution service
+          example: 4D91C370D2BB-43B5-9EB7-42B47955E505
+          nullable: true
+        instanceName:
+          type: string
+          description: Instance name of evolution service
+          example: sorvete-amigo
+          nullable: true
       required:
         - pointsForMoneySpent
         - expirationInDays

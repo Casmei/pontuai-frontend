@@ -32,10 +32,10 @@ export default async function StoreConfigPage({
           <TabsTrigger value="notifications">Configuração de Notificações</TabsTrigger>
         </TabsList>
         <TabsContent value="points">
-          <ConfigForm storeId={storeId} initialData={config.pointConfig} />
+          <ConfigForm storeId={storeId} initialData={config} />
         </TabsContent>
         <TabsContent value="notifications">
-          <NotificationConfigForm storeId={storeId} />
+          <NotificationConfigForm storeId={storeId} initialData={config} />
         </TabsContent>
       </Tabs>
     </div>
