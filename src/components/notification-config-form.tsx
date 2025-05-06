@@ -35,9 +35,9 @@ export function NotificationConfigForm({ storeId, initialData }: NotificationCon
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            apikey: initialData.whatsappConfig.apikey,
-            baseUrl: initialData.whatsappConfig.baseUrl,
-            instanceName: initialData.whatsappConfig.instanceName,
+            apikey: initialData.whatsappConfig.apikey || "",
+            baseUrl: initialData.whatsappConfig.baseUrl || "",
+            instanceName: initialData.whatsappConfig.instanceName || "",
         },
     })
 
