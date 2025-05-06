@@ -28,6 +28,12 @@ paths:
     get:
       operationId: CustomerController_getAll
       parameters:
+        - name: query
+          required: false
+          in: query
+          description: Optional search query
+          schema:
+            type: string
         - name: x-tenant-id
           in: header
           required: true

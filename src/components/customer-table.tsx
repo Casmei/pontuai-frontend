@@ -1,5 +1,4 @@
 import { getCustomers } from "@/lib/services/customer-service"
-import { formatDate } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
@@ -7,10 +6,11 @@ import { Edit, Trash } from "lucide-react"
 
 interface CustomerTableProps {
   storeId: string
+  query: string
 }
 
-export async function CustomerTable({ storeId }: CustomerTableProps) {
-  const [err, customers] = await getCustomers({ xTenantId: storeId })
+export async function CustomerTable({ storeId, query }: CustomerTableProps) {
+  const [err, customers] = await getCustomers({ xTenantId: storeId, query })
 
   if (err) {
     return (

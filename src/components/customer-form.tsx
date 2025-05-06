@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -16,13 +16,24 @@ import {
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { createCustomerAction } from "@/action/create-customer";
+import {
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "./ui/dialog";
+import { Label } from "./ui/label";
+import { formatCurrency } from "@/lib/utils";
+import { PhoneInput } from "./ui/phone-input";
+import { DialogClose } from "@radix-ui/react-dialog";
 
 const formSchema = z.object({
   name: z.string().min(2, "Nome deve ter pelo menos 2 caracteres"),
   phone: z.string().min(10, "Telefone deve ter pelo menos 10 dígitos"),
-  moneySpent: z
-    .number({ invalid_type_error: "Valor gasto precisa ser um número" })
-  ,
+  moneySpent: z.number({
+    invalid_type_error: "Valor gasto precisa ser um número",
+  }),
 });
 
 interface CustomerFormProps {
@@ -67,58 +78,83 @@ export function CustomerForm({ storeId }: CustomerFormProps) {
   }
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Nome do Cliente</FormLabel>
-                <FormControl>
-                  <Input placeholder="Nome completo" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
 
-          <FormField
-            control={form.control}
-            name="phone"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Telefone</FormLabel>
-                <FormControl>
-                  <Input placeholder="(00) 00000-0000" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+    <DialogContent>
+      <DialogHeader>
+        <DialogTitle>Novo Cliente</DialogTitle>
+        <DialogDescription>
+          Criar uma nova conta de cliente no programa de fidelização.
+        </DialogDescription>
+      </DialogHeader>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <div className="space-y-4 py-4">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Nome do Cliente</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Nome completo" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="moneySpent"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Dinheiro Gasto</FormLabel>
-                <FormControl>
-                  <Input placeholder="12.4" {...field} type="number" onChange={(e) => field.onChange(+e.target.value)} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
+            <FormField
+              control={form.control}
+              name="phone"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Telefone</FormLabel>
+                  <FormControl>
+                    <PhoneInput defaultCountry="BR" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-        <div className="flex justify-end">
-          <Button type="submit" disabled={isLoading}>
-            {isLoading ? "Adicionando..." : "Adicionar Cliente"}
-          </Button>
-        </div>
-      </form>
-    </Form>
+            <FormField
+              control={form.control}
+              name="moneySpent"
+              render={({ field }) => {
+                const handleChange = useCallback(
+                  (e: React.ChangeEvent<HTMLInputElement>) => {
+                    const rawValue = e.target.value.replace(/\D/g, ""); // Remove tudo que não é número
+                    const numericValue = Number(rawValue) / 100;
+                    field.onChange(numericValue);
+                  },
+                  [field]
+                );
+
+                return (
+                  <FormItem>
+                    <FormLabel>Dinheiro Gasto</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="text"
+                        value={formatCurrency(Number(field.value || 0))}
+                        onChange={handleChange}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
+            />
+          </div>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button type="submit" disabled={isLoading}>
+                {isLoading ? "Adicionando..." : "Adicionar Cliente"}
+              </Button>
+            </DialogClose>
+          </DialogFooter>
+        </form>
+      </Form>
+    </DialogContent>
   );
 }

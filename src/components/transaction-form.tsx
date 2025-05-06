@@ -26,6 +26,7 @@ import { useCallback, useState } from "react";
 import { toast } from "sonner";
 import { createTransactionAction } from "@/action/create-transaction";
 import { redeemRewardAction } from "@/action/redeem-reward";
+import { formatCurrency } from "@/lib/utils";
 
 const purchaseSchema = z.object({
   type: z.literal("purchase"),
@@ -204,7 +205,7 @@ export function TransactionForm({
                 <FormLabel>Valor da Compra (R$)</FormLabel>
                 <FormControl>
                   <Input type="text"
-                    value={brlFormatter.format(Number(field.value || 0))}
+                    value={formatCurrency(Number(field.value || 0))}
                     onChange={handleChange} />
                 </FormControl>
                 <FormMessage />

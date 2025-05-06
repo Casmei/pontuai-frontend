@@ -35,6 +35,7 @@ export interface CustomerControllerCreateRequest {
 
 export interface CustomerControllerGetAllRequest {
     xTenantId: string;
+    query?: string;
 }
 
 /**
@@ -109,6 +110,10 @@ export class CustomerApi extends runtime.BaseAPI {
         }
 
         const queryParameters: any = {};
+
+        if (requestParameters['query'] != null) {
+            queryParameters['query'] = requestParameters['query'];
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
