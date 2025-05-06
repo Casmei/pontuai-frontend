@@ -6,7 +6,12 @@ import { createTransaction } from "@/lib/services/transaction-service";
 import { revalidateTag } from "next/cache";
 
 export async function createTransactionAction(data: TransactionControllerCreateRequest) {
-    await createTransaction(data);
-    // revalidateTag(getTransactions.name)
-    revalidateTag(getCustomers.name)
+    const [error] = await createTransaction(data);
+
+    if (error) {
+        return [{ message: error.message }, null] as const;
+    }
+
+    revalidateTag(getCustomers.name);
+    return [null, null] as const;
 }

@@ -12,7 +12,8 @@ export default async function StoreLayout({
   children: React.ReactNode
   params: { storeId: string }
 }) {
-  const store = await getStoreById(params.storeId)
+  const { storeId } = await params
+  const store = await getStoreById(storeId)
 
   if (!store) {
     notFound()

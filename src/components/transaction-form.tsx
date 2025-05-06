@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { CreateRewardResponse, CustomerWithPointsResponse } from "@/gen";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { toast } from "sonner";
 import { createTransactionAction } from "@/action/create-transaction";
 import { redeemRewardAction } from "@/action/redeem-reward";
@@ -54,6 +54,11 @@ export function TransactionForm({
 }: TransactionFormProps) {
   const [isLoading, setIsLoading] = useState(false);
 
+  const brlFormatter = new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  });
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -66,18 +71,25 @@ export function TransactionForm({
   const transactionType = form.watch("type");
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log("a");
     try {
       setIsLoading(true);
 
       if (values.type === "purchase") {
-        await createTransactionAction({
+        const [error] = await createTransactionAction({
           xTenantId: storeId,
           addPointsDto: {
             customerId: values.customerId,
             moneySpent: values.amount,
           },
         });
+
+        if (error) {
+          toast.error("Erro ao registrar transação", {
+            description: error.message,
+          });
+          return;
+        }
+
       } else {
         await redeemRewardAction({
           id: values.rewardId,
@@ -86,10 +98,10 @@ export function TransactionForm({
         });
       }
 
-      // await createTransaction(storeId, values)
       toast.success("Transação registrada", {
         description: "A transação foi registrada com sucesso.",
       });
+
       form.reset(
         values.type === "purchase"
           ? {
@@ -105,14 +117,13 @@ export function TransactionForm({
       );
     } catch (error) {
       console.error(error);
-      toast.error("Erro", {
+      toast.error("Erro inesperado", {
         description: "Ocorreu um erro ao registrar a transação.",
       });
     } finally {
       setIsLoading(false);
     }
   }
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -180,15 +191,25 @@ export function TransactionForm({
           <FormField
             control={form.control}
             name="amount"
-            render={({ field }) => (
-              <FormItem>
+            render={({ field }) => {
+              const handleChange = useCallback(
+                (e: React.ChangeEvent<HTMLInputElement>) => {
+                  const rawValue = e.target.value.replace(/\D/g, ""); // Remove tudo que não é número
+                  const numericValue = Number(rawValue) / 100;
+                  field.onChange(numericValue);
+                },
+                [field]
+              );
+              return (<FormItem >
                 <FormLabel>Valor da Compra (R$)</FormLabel>
                 <FormControl>
-                  <Input type="number" step="0.01" {...field} />
+                  <Input type="text"
+                    value={brlFormatter.format(Number(field.value || 0))}
+                    onChange={handleChange} />
                 </FormControl>
                 <FormMessage />
-              </FormItem>
-            )}
+              </FormItem>)
+            }}
           />
         )}
 

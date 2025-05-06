@@ -562,60 +562,41 @@ components:
     UpdateTenantSettingsDto:
       type: object
       properties:
-        ratioAmount:
+        pointsForMoneySpent:
           type: number
-          description: Ratio Amount
-          example: 1
-        ratioMoneySpent:
-          type: number
-          description: Ratio Money Spend
+          description: Points for money spent
           example: 1
         expirationInDays:
           type: number
           description: Expiration points in days
           example: 90
-        minimumRedemptionValue:
+        minimumValueForWinPoints:
           type: number
-          description: Minimum Redemption points value
+          description: Minimum value for win points
           example: 100
       required:
-        - ratioAmount
-        - ratioMoneySpent
+        - pointsForMoneySpent
         - expirationInDays
-        - minimumRedemptionValue
-    RatioConfig:
-      type: object
-      properties:
-        amount:
-          type: number
-          description: The number of points earned
-          example: 1
-        moneySpent:
-          type: number
-          description: The amount of money (in currency units) required to earn the points
-          example: 2
-      required:
-        - amount
-        - moneySpent
+        - minimumValueForWinPoints
     PointConfig:
       type: object
       properties:
-        ratio:
-          description: Configuration for how points are earned
-          allOf:
-            - $ref: '#/components/schemas/RatioConfig'
+        pointsForMoneySpent:
+          type: number
+          description: Number of points earned for a unit of money spent
+          example: 1
         expirationInDays:
           type: number
           description: The number of days before points expire
           example: 90
-        minimumRedemptionValue:
+        minimumValueForWinPoints:
           type: number
-          description: The minimum value required for a point redemption
+          description: Minimum value for win points
           example: 100
       required:
-        - ratio
+        - pointsForMoneySpent
         - expirationInDays
-        - minimumRedemptionValue
+        - minimumValueForWinPoints
     WhatsappConfig:
       type: object
       properties:

@@ -20,17 +20,11 @@ import { mapValues } from '../runtime';
  */
 export interface UpdateTenantSettingsDto {
     /**
-     * Ratio Amount
+     * Points for money spent
      * @type {number}
      * @memberof UpdateTenantSettingsDto
      */
-    ratioAmount: number;
-    /**
-     * Ratio Money Spend
-     * @type {number}
-     * @memberof UpdateTenantSettingsDto
-     */
-    ratioMoneySpent: number;
+    pointsForMoneySpent: number;
     /**
      * Expiration points in days
      * @type {number}
@@ -38,21 +32,20 @@ export interface UpdateTenantSettingsDto {
      */
     expirationInDays: number;
     /**
-     * Minimum Redemption points value
+     * Minimum value for win points
      * @type {number}
      * @memberof UpdateTenantSettingsDto
      */
-    minimumRedemptionValue: number;
+    minimumValueForWinPoints: number;
 }
 
 /**
  * Check if a given object implements the UpdateTenantSettingsDto interface.
  */
 export function instanceOfUpdateTenantSettingsDto(value: object): value is UpdateTenantSettingsDto {
-    if (!('ratioAmount' in value) || value['ratioAmount'] === undefined) return false;
-    if (!('ratioMoneySpent' in value) || value['ratioMoneySpent'] === undefined) return false;
+    if (!('pointsForMoneySpent' in value) || value['pointsForMoneySpent'] === undefined) return false;
     if (!('expirationInDays' in value) || value['expirationInDays'] === undefined) return false;
-    if (!('minimumRedemptionValue' in value) || value['minimumRedemptionValue'] === undefined) return false;
+    if (!('minimumValueForWinPoints' in value) || value['minimumValueForWinPoints'] === undefined) return false;
     return true;
 }
 
@@ -66,10 +59,9 @@ export function UpdateTenantSettingsDtoFromJSONTyped(json: any, ignoreDiscrimina
     }
     return {
         
-        'ratioAmount': json['ratioAmount'],
-        'ratioMoneySpent': json['ratioMoneySpent'],
+        'pointsForMoneySpent': json['pointsForMoneySpent'],
         'expirationInDays': json['expirationInDays'],
-        'minimumRedemptionValue': json['minimumRedemptionValue'],
+        'minimumValueForWinPoints': json['minimumValueForWinPoints'],
     };
 }
 
@@ -84,10 +76,9 @@ export function UpdateTenantSettingsDtoToJSONTyped(value?: UpdateTenantSettingsD
 
     return {
         
-        'ratioAmount': value['ratioAmount'],
-        'ratioMoneySpent': value['ratioMoneySpent'],
+        'pointsForMoneySpent': value['pointsForMoneySpent'],
         'expirationInDays': value['expirationInDays'],
-        'minimumRedemptionValue': value['minimumRedemptionValue'],
+        'minimumValueForWinPoints': value['minimumValueForWinPoints'],
     };
 }
 

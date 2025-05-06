@@ -16,7 +16,6 @@ models/CustomerResponse.ts
 models/CustomerWithPointsResponse.ts
 models/GetTenant.ts
 models/PointConfig.ts
-models/RatioConfig.ts
 models/RedeemRewardDto.ts
 models/RewardResponse.ts
 models/TenantConfig.ts

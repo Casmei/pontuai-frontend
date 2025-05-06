@@ -1,7 +1,4 @@
-import { generateId } from "@/lib/utils"
-import { getCustomerById, updateCustomerPoints } from "./customer-service"
-import { getRewardById } from "./reward-service"
-import { Configuration, TransactionApi, TransactionControllerCreateRequest, TransactionControllerGetAllRequest } from "@/gen";
+import { Configuration, ResponseError, TransactionApi, TransactionControllerCreateRequest, TransactionControllerGetAllRequest } from "@/gen";
 import { getAccessTokenRSC } from "@logto/next/server-actions";
 import { logtoConfig } from "@/config/logto";
 
@@ -15,7 +12,6 @@ const apiClient = new TransactionApi(
   })
 );
 
-// Funções de serviço
 export async function getTransactions(data: TransactionControllerGetAllRequest) {
   try {
     const response = await apiClient.transactionControllerGetAll(data);
@@ -30,8 +26,13 @@ export async function createTransaction(data: TransactionControllerCreateRequest
   try {
     const response = await apiClient.transactionControllerCreate(data);
     return [null, response] as const;
-  } catch (e) {
-    console.error(e);
-    return [new Error("Falha ao criar transação"), null] as const;
+  } catch (error) {
+    if (error instanceof ResponseError) {
+      const responseBody = await error.response.json().catch(() => null);
+      const message = responseBody?.message || "Erro na requisição da transação.";
+      return [new Error(message), null];
+    }
+
+    return [new Error("Erro desconhecido ao criar transação."), null];
   }
 }

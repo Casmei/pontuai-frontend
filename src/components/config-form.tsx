@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -18,15 +18,13 @@ import {
 } from "@/components/ui/form";
 import { toast } from "sonner";
 import { PointConfig } from "@/gen";
-import { updatePointConfig } from "@/action/update-point-config";
+import { updatePointConfigAction } from "@/action/update-point-config";
 
 const formSchema = z.object({
-  pointsPerReal: z.coerce.number().min(0.1, "Deve ser pelo menos 0.1"),
-  expirationDays: z.coerce.number().int().min(1, "Deve ser pelo menos 1 dia"),
-  minSpendToEarn: z.coerce.number().min(0, "Não pode ser negativo"),
-  minPointsToRedeem: z.coerce
+  pointsForMoneySpent: z.coerce.number().min(0.1, "Deve ser pelo menos 0.1"),
+  expirationInDays: z.coerce.number().int().min(1, "Deve ser pelo menos 1 dia"),
+  minimumValueForWinPoints: z.coerce
     .number()
-    .int()
     .min(1, "Deve ser pelo menos 1 ponto"),
 });
 
@@ -38,36 +36,46 @@ interface ConfigFormProps {
 export function ConfigForm({ storeId, initialData }: ConfigFormProps) {
   const [isLoading, setIsLoading] = useState(false);
 
+  const brlFormatter = new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  });
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      pointsPerReal: initialData.ratio.amount,
-      expirationDays: initialData.expirationInDays,
-      minSpendToEarn: initialData.ratio.moneySpent,
-      minPointsToRedeem: initialData.minimumRedemptionValue,
+      pointsForMoneySpent: initialData.pointsForMoneySpent,
+      expirationInDays: initialData.expirationInDays,
+      minimumValueForWinPoints: initialData.minimumValueForWinPoints,
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    try {
-      setIsLoading(true);
+  async function onSubmit(data: z.infer<typeof formSchema>) {
+    setIsLoading(true);
 
-      await updatePointConfig({
+    try {
+      const [error] = await updatePointConfigAction({
         tenantId: storeId,
         updateTenantSettingsDto: {
-          expirationInDays: values.expirationDays,
-          minimumRedemptionValue: values.minPointsToRedeem,
-          ratioAmount: values.pointsPerReal,
-          ratioMoneySpent: values.minSpendToEarn,
+          minimumValueForWinPoints: data.minimumValueForWinPoints,
+          pointsForMoneySpent: data.pointsForMoneySpent,
+          expirationInDays: data.expirationInDays,
         },
       });
+
+      if (error) {
+        toast.error("Erro ao salvar", {
+          description: error.message || "Erro desconhecido ao atualizar as configurações.",
+        });
+        return;
+      }
 
       toast.success("Configurações atualizadas", {
         description: "As configurações foram salvas com sucesso.",
       });
-    } catch (error) {
-      console.error(error);
-      toast.error("Erro", {
+    } catch (err: unknown) {
+      console.error(err);
+      toast.error("Erro inesperado", {
         description: "Ocorreu um erro ao salvar as configurações.",
       });
     } finally {
@@ -82,7 +90,7 @@ export function ConfigForm({ storeId, initialData }: ConfigFormProps) {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <FormField
               control={form.control}
-              name="pointsPerReal"
+              name="pointsForMoneySpent"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Pontos por Real</FormLabel>
@@ -99,7 +107,7 @@ export function ConfigForm({ storeId, initialData }: ConfigFormProps) {
 
             <FormField
               control={form.control}
-              name="expirationDays"
+              name="expirationInDays"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Dias para Expiração</FormLabel>
@@ -116,40 +124,35 @@ export function ConfigForm({ storeId, initialData }: ConfigFormProps) {
 
             <FormField
               control={form.control}
-              name="minSpendToEarn"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Valor Mínimo para Pontuar (R$)</FormLabel>
-                  <FormControl>
-                    <Input type="number" step="0.01" {...field} />
-                  </FormControl>
-                  <FormDescription>
-                    Valor mínimo que o cliente precisa gastar para começar a
-                    ganhar pontos
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+              name="minimumValueForWinPoints"
+              render={({ field }) => {
+                const handleChange = useCallback(
+                  (e: React.ChangeEvent<HTMLInputElement>) => {
+                    const rawValue = e.target.value.replace(/\D/g, ""); // Remove tudo que não é número
+                    const numericValue = Number(rawValue) / 100;
+                    field.onChange(numericValue);
+                  },
+                  [field]
+                );
 
-            <FormField
-              control={form.control}
-              name="minPointsToRedeem"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Pontos Mínimos para Resgate</FormLabel>
-                  <FormControl>
-                    <Input type="number" {...field} />
-                  </FormControl>
-                  <FormDescription>
-                    Quantidade mínima de pontos necessários para fazer um
-                    resgate
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
+                return (
+                  <FormItem>
+                    <FormLabel>Valor Mínimo para Pontuar (R$)</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="text"
+                        value={brlFormatter.format(Number(field.value || 0))}
+                        onChange={handleChange}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      Valor mínimo que o cliente precisa gastar para começar a ganhar pontos
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
             />
-
             <div className="flex justify-end">
               <Button type="submit" disabled={isLoading}>
                 {isLoading ? "Salvando..." : "Salvar Configurações"}

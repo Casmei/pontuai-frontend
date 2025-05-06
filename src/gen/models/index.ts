@@ -12,7 +12,6 @@ export * from './CustomerResponse';
 export * from './CustomerWithPointsResponse';
 export * from './GetTenant';
 export * from './PointConfig';
-export * from './RatioConfig';
 export * from './RedeemRewardDto';
 export * from './RewardResponse';
 export * from './TenantConfig';

@@ -13,14 +13,6 @@
  */
 
 import { mapValues } from '../runtime';
-import type { RatioConfig } from './RatioConfig';
-import {
-    RatioConfigFromJSON,
-    RatioConfigFromJSONTyped,
-    RatioConfigToJSON,
-    RatioConfigToJSONTyped,
-} from './RatioConfig';
-
 /**
  * 
  * @export
@@ -28,11 +20,11 @@ import {
  */
 export interface PointConfig {
     /**
-     * Configuration for how points are earned
-     * @type {RatioConfig}
+     * Number of points earned for a unit of money spent
+     * @type {number}
      * @memberof PointConfig
      */
-    ratio: RatioConfig;
+    pointsForMoneySpent: number;
     /**
      * The number of days before points expire
      * @type {number}
@@ -40,20 +32,20 @@ export interface PointConfig {
      */
     expirationInDays: number;
     /**
-     * The minimum value required for a point redemption
+     * Minimum value for win points
      * @type {number}
      * @memberof PointConfig
      */
-    minimumRedemptionValue: number;
+    minimumValueForWinPoints: number;
 }
 
 /**
  * Check if a given object implements the PointConfig interface.
  */
 export function instanceOfPointConfig(value: object): value is PointConfig {
-    if (!('ratio' in value) || value['ratio'] === undefined) return false;
+    if (!('pointsForMoneySpent' in value) || value['pointsForMoneySpent'] === undefined) return false;
     if (!('expirationInDays' in value) || value['expirationInDays'] === undefined) return false;
-    if (!('minimumRedemptionValue' in value) || value['minimumRedemptionValue'] === undefined) return false;
+    if (!('minimumValueForWinPoints' in value) || value['minimumValueForWinPoints'] === undefined) return false;
     return true;
 }
 
@@ -67,9 +59,9 @@ export function PointConfigFromJSONTyped(json: any, ignoreDiscriminator: boolean
     }
     return {
         
-        'ratio': RatioConfigFromJSON(json['ratio']),
+        'pointsForMoneySpent': json['pointsForMoneySpent'],
         'expirationInDays': json['expirationInDays'],
-        'minimumRedemptionValue': json['minimumRedemptionValue'],
+        'minimumValueForWinPoints': json['minimumValueForWinPoints'],
     };
 }
 
@@ -84,9 +76,9 @@ export function PointConfigToJSONTyped(value?: PointConfig | null, ignoreDiscrim
 
     return {
         
-        'ratio': RatioConfigToJSON(value['ratio']),
+        'pointsForMoneySpent': value['pointsForMoneySpent'],
         'expirationInDays': value['expirationInDays'],
-        'minimumRedemptionValue': value['minimumRedemptionValue'],
+        'minimumValueForWinPoints': value['minimumValueForWinPoints'],
     };
 }
 
