@@ -27,7 +27,7 @@ export default async function StoreConfigPage({
       <h1 className="text-3xl font-bold">Configurações</h1>
 
       <Tabs defaultValue="points" className="w-full">
-        <TabsList className="grid w-full grid-cols-2">
+        <TabsList className="grid w-full grid-cols-1 md:grid-cols-2 mb-8">
           <TabsTrigger value="points">Configuração de Pontos</TabsTrigger>
           <TabsTrigger value="notifications">Configuração de Notificações</TabsTrigger>
         </TabsList>
